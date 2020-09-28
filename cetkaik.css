@@ -1,6 +1,4 @@
-body {
-    zoom: 1.6;
-}
+
 
 .cetkaik-player.theme-simple .board_inner tr td {
     position: relative
@@ -30,6 +28,7 @@ body {
     z-index: 0;
 }
 
+/*
 .cetkaik-player.theme-simple .board_inner tr:nth-child(3) td:nth-child(5):after, .cetkaik-player.theme-simple .board_inner tr:nth-child(5) td:nth-child(3):after {
     position: absolute;
     content: "";
@@ -116,7 +115,7 @@ body {
     height: 5px;
     background: #636363;
     z-index: 0;
-}
+}*/
 
 
 .place_55 {

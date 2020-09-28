@@ -1,0 +1,122 @@
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.materialdesignicons.com/5.1.45/css/materialdesignicons.min.css" rel="stylesheet">
+
+    <style>
+        .html_format {
+            overflow-x: auto;
+            white-space: nowrap
+        }
+
+        .html_format .tooltip {
+            white-space: normal
+        }
+
+        .html_format table.html_format_type_hash>tbody>tr>th {
+            text-align: right
+        }
+
+        .html_format table.html_format_type_hash>tbody>tr>td {
+            text-align: left
+        }
+
+        .html_format table.html_format_type_array_of_hash thead {
+            white-space: normal
+        }
+    </style>
+    <script
+        src="https://www.shogi-extend.com/assets/application-04024382391bb910584145d8113cf35ef376b55d125bb4516cebeb14ce788597.js"></script>
+    <link href="main3.css" rel="stylesheet">
+    <link href="cetkaik.css" rel="stylesheet">
+    <link href="https://www.googletagmanager.com" rel="preconnect">
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-109851345-1" charset="utf-8"></script>
+    <script src="https://www.shogi-extend.com/packs/swars_battle_index-2ecec4e0c179b4495372.js"></script>
+    <script src="hmm.js"></script>
+
+</head>
+
+<body onload="init()">
+    <div tabindex="-1" class="modal is-active is-full-screen">
+        <div class="modal-background"></div>
+        <div class="animation-content">
+            <div class="sp_show modal-card is-cetkaik-player-modal-card">
+                <div class="modal-card-body">
+                    <div class="is-size-7 has-text-centered"><span style="visibility: visible;"
+                            class="has_player_name">筆墨風 vs
+                            星享青</span></div>
+                    <div
+                        class="cetkaik-player theme-simple size-medium bg_variant-a piece_variant-a run_mode-view_mode horizontal">
+
+                        <div class="turn_edit_container">
+                            <div class="turn_number_area"><span class="turn_edit_text">29手</span>
+                            </div>
+
+                        </div>
+                        <div class="board_container font_size_base">
+                            <div class="flippable flip">
+                                <div class="piece_stand_outer flex_item location_white production turn_active">
+                                    <div class="location_mark_wrap">
+                                        <div class="location_mark">12</div>
+                                        <div class="piece_count piece_count1">99</div>
+                                        <!---->
+                                    </div>
+                                    <div class="player_name has_player_name">星</div>
+                                    <ul class="piece_stand"></ul>
+                                </div>
+                                <canvas id="cv" width="389" height="389" style="margin: 0 12px"></canvas>
+                                <div class="flex_item">
+                                    <!---->
+                                    <div></div>
+                                    <div class="piece_stand_outer location_black production">
+                                        <div class="location_mark_wrap">
+                                            <div class="location_mark">28</div>
+                                            <div class="piece_count piece_count1">99</div>
+                                            <!---->
+                                        </div>
+                                        <div class="player_name has_player_name">筆</div>
+                                        <ul class="piece_stand"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!---->
+                        </div>
+                        <div>
+                            <div class="controller_group buttons has-addons is-centered is-paddingless"><button
+                                    class="button first"><span class="icon"><i
+                                            class="mdi mdi-menu-left mdi-24px"></i></span></button><button
+                                    class="button previous"><span class="icon is-small"><i
+                                            class="mdi mdi-chevron-left"></i></span></button><button
+                                    class="button next"><span class="icon is-small"><i
+                                            class="mdi mdi-chevron-right"></i></span></button><button
+                                    class="button last"><span class="icon"><i
+                                            class="mdi mdi-menu-right mdi-24px"></i></span></button><button
+                                    class="button flip"
+                                    onclick="document.getElementsByClassName('flippable')[0].classList.toggle('flip')"><span
+                                        class="icon is-small"><i class="mdi mdi-swap-vertical"></i></span></button>
+                            </div>
+                            <div><input type="range" min="0" max="108" class="turn_slider"></div>
+                        </div>
+                        <!---->
+                        <!---->
+                        <!---->
+                    </div>
+                    <div class="sp_show_switches has-text-centered"><label class="switch is-small is-rounded"><input
+                                type="checkbox" false-value="true" value="false"
+                                onclick="document.getElementsByClassName('has_player_name')[0].classList.toggle('is-invisible');document.getElementsByClassName('has_player_name')[1].classList.toggle('is-invisible');document.getElementsByClassName('has_player_name')[2].classList.toggle('is-invisible');">
+                            <span class="check"></span> <span class="control-label"><span class="icon is-small"><i
+                                        class="mdi mdi-account-remove"></i></span></span></label></div>
+                    <!---->
+                    <!---->
+                </div>
+
+            </div>
+            <!---->
+        </div>
+    </div>
+
+</body>
+
+</html>
