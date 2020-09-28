@@ -3,37 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.materialdesignicons.com/5.1.45/css/materialdesignicons.min.css" rel="stylesheet">
-
-    <style>
-        .html_format {
-            overflow-x: auto;
-            white-space: nowrap
-        }
-
-        .html_format .tooltip {
-            white-space: normal
-        }
-
-        .html_format table.html_format_type_hash>tbody>tr>th {
-            text-align: right
-        }
-
-        .html_format table.html_format_type_hash>tbody>tr>td {
-            text-align: left
-        }
-
-        .html_format table.html_format_type_array_of_hash thead {
-            white-space: normal
-        }
-    </style>
-    <script
-        src="https://www.shogi-extend.com/assets/application-04024382391bb910584145d8113cf35ef376b55d125bb4516cebeb14ce788597.js"></script>
+    <link href="https://cdn.materialdesignicons.com/5.1.45/css/materialdesignicons.min.css" rel="stylesheet">  
     <link href="main3.css" rel="stylesheet">
     <link href="cetkaik.css" rel="stylesheet">
-    <link href="https://www.googletagmanager.com" rel="preconnect">
-    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-109851345-1" charset="utf-8"></script>
-    <script src="https://www.shogi-extend.com/packs/swars_battle_index-2ecec4e0c179b4495372.js"></script>
     <script src="hmm.js"></script>
 
 </head>
@@ -51,7 +23,7 @@
                         class="cetkaik-player theme-simple size-medium bg_variant-a piece_variant-a run_mode-view_mode horizontal">
 
                         <div class="turn_edit_container">
-                            <div class="turn_number_area"><span class="turn_edit_text">29手</span>
+                            <div class="turn_number_area"><span class="turn_edit_text">29日</span>
                             </div>
 
                         </div>
@@ -66,7 +38,18 @@
                                     <div class="player_name has_player_name">星</div>
                                     <ul class="piece_stand"></ul>
                                 </div>
-                                <canvas id="cv" width="389" height="389" style="margin: 0 12px"></canvas>
+                                <div style="position: relative; margin: 0 12px" id="pieces">
+                                    <div style="position: absolute; left: 323px; top: 150px; transform: scale(0.26)"><div style="width: 87px; height: 87px; background-position-x: -227px;  background-image: url(ゴシック駒.svg); "></div></div>
+
+                                    <div style="position: absolute; left: 280px; top: 150px; transform: scale(0.26)"><div style="width: 87px; height: 87px; background-position-x: -227px;background-position-y:-277px; background-image: url(ゴシック駒_赤.svg)"></div></div>
+
+                                    <div style="position: absolute; left: 323px; top: 107px; transform: scale(0.26) rotate(180deg)"><div style="width: 87px; height: 87px; background-position-x: -227px;background-position-y:-277px; background-image: url(ゴシック駒.svg)"></div></div>
+                                    <div style="position: absolute; left: 237px; top: 107px; transform: scale(0.26) rotate(180deg)"><div style="width: 87px; height: 87px; background-position-x: -227px;background-position-y:-277px; background-image: url(ゴシック駒.svg)"></div></div>
+
+                                    <div style="position: absolute; left: 194px; top: 107px; transform: scale(0.26) rotate(180deg)"><div style="width: 87px; height: 87px; background-position-x: -227px;background-position-y:-277px; background-image: url(ゴシック駒_赤.svg)"></div></div>
+
+                                    <canvas id="cv" width="387" height="387"></canvas>
+                                </div>
                                 <div class="flex_item">
                                     <!---->
                                     <div></div>

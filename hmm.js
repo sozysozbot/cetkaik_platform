@@ -1,4 +1,4 @@
-const height = 389;
+const height = 387;
 
 function init() {
     const ctx = document.getElementById("cv").getContext("2d");
@@ -25,7 +25,7 @@ function init() {
     ctx.fillRect(4 * height / 9, 4 * height / 9, height / 9, height / 9);
 
     ctx.strokeStyle = 'rgb(99, 99, 99)';
-    ctx.lineWidth = 0.05 * height / 9;
+    ctx.lineWidth = 0.03 * height / 9;
     
     for (let i = 0; i <= 9; i++) {
         ctx.beginPath();
@@ -38,16 +38,4 @@ function init() {
         ctx.lineTo(i*height/9, height);
         ctx.stroke();
     }
-
-    
-    ctx.beginPath();
-    ctx.moveTo(2*height/9, 2*height/9);
-    ctx.lineTo(7*height/9, 7*height/9);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(2*height/9, 7*height/9);
-    ctx.lineTo(7*height/9, 2*height/9);
-    ctx.stroke();
-    
 }
