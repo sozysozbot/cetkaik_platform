@@ -45,7 +45,7 @@
                                             "船", "無", "兵", "弓", "車", "虎", "馬", "筆", "巫", "将", "王", "皇"
                                         ];
                                         function fooo(column, row, color_and_prof, rotated, is_bold) {
-                                            const left = 43 * (column - 0.5);
+                                            const left = left_margin + 43 * (column - 0.5);
                                             const top = 43 * (row - 0.5);
                                             if (color_and_prof === "皇") {
                                                 const x = profs.indexOf("皇") * -100 - 27;
@@ -125,7 +125,7 @@
                                         fooo(1, 1, "赤弓", true);
                                         fooo(4, 0, "赤虎", true);
                                     </script>
-                                    <canvas id="cv" width="387" height="387"></canvas>
+                                    <canvas id="cv" width="467" height="387"></canvas>
                                 </div>
                                 <div class="flex_item">
                                     <!---->
