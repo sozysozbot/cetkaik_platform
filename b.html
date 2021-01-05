@@ -8,6 +8,7 @@
     <link href="main3.css" rel="stylesheet">
     <link href="cetkaik.css" rel="stylesheet">
     <script src="hmm.js"></script>
+    <script src="b.js"></script>
     <title>cetkaik extend</title>
 </head>
 
@@ -24,9 +25,11 @@
                         class="cetkaik-player theme-simple size-medium bg_variant-a piece_variant-a run_mode-view_mode horizontal">
 
                         <div class="turn_edit_container">
-                            <div class="turn_number_area"><span class="turn_edit_text">29日</span>
+                            <div class="turn_number_area"><span class="turn_edit_text">
+                                <span id="season_text">秋</span>
+                                <span id="turn_text">29</span>日
+                                <span id="rate_text">4</span>層</span>
                             </div>
-
                         </div>
                         <div class="board_container font_size_base">
                             <div class="flippable flip">
@@ -41,89 +44,59 @@
                                 </div>
                                 <div style="position: relative; margin: 0 12px" id="pieces">
                                     <script>
-                                        const profs = [
-                                            "船", "無", "兵", "弓", "車", "虎", "馬", "筆", "巫", "将", "王", "皇"
-                                        ];
-                                        function fooo(column, row, color_and_prof, rotated, is_bold) {
-                                            const left = left_margin + 43 * (column - 0.5);
-                                            const top = top_margin + 43 * (row - 0.5);
-                                            if (color_and_prof === "皇") {
-                                                const x = profs.indexOf("皇") * -100 - 27;
-                                                const y = is_bold ? 0 : -277;
-                                                const color_path = "ゴシック駒";
-                                                document.write(`
-                                        
-                                    <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${"rotate(90deg)"}">
-                                        <div
-                                            style="width: 87px; height: 87px; background-position-x: ${x}px; background-position-y: ${y}px; background-image: url(${color_path}.svg); ">
-                                        </div>
-                                    </div>`);
-                                            } else {
-                                                const [color, prof] = color_and_prof;
-                                                const x = profs.indexOf(prof) * -100 - 27;
-                                                const y = is_bold ? 0 : -277;
-                                                const color_path = {
-                                                    "黒": "ゴシック駒",
-                                                    "赤": "ゴシック駒_赤",
-                                                }[color];
-                                                document.write(`
-                                        
-                                    <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${rotated ? "rotate(180deg)" : ""}">
-                                        <div
-                                            style="width: 87px; height: 87px; background-position-x: ${x}px; background-position-y: ${y}px; background-image: url(${color_path}.svg); ">
-                                        </div>
-                                    </div>`);
-                                            }
-                                        }
-                                        fooo(8, 4, "黒兵", false, true);
-                                        fooo(7, 4, "赤兵", false);
-                                        fooo(6, 5, "黒兵", false);
-                                        fooo(5, 5, "赤兵", false);
-                                        fooo(4, 5, "黒将", false);
-                                        fooo(2, 5, "黒兵", false);
-                                        fooo(6, 6, "黒車", false);
-                                        fooo(4, 6, "黒船", false);
-                                        fooo(3, 6, "赤兵", false);
-                                        fooo(2, 6, "赤将", false);
-                                        fooo(1, 6, "赤兵", false);
-                                        fooo(0, 6, "黒兵", false);
-                                        fooo(0, 7, "黒巫", false);
-                                        fooo(1, 7, "黒弓", false);
-                                        fooo(2, 7, "赤車", false);
-                                        fooo(3, 7, "黒虎", false);
-                                        fooo(5, 7, "赤虎", false);
-                                        fooo(7, 7, "赤弓", false);
-                                        fooo(8, 7, "赤巫", false);
-                                        fooo(8, 8, "黒筆", false);
-                                        fooo(7, 8, "黒馬", false);
-                                        fooo(4, 8, "黒王", false);
-                                        fooo(1, 8, "赤馬", false);
-                                        fooo(0, 8, "赤筆", false);
-                                        fooo(4, 4, "皇", null);
-                                        fooo(8, 3, "黒兵", true);
-                                        fooo(6, 3, "黒兵", true);
-                                        fooo(5, 3, "赤兵", true);
-                                        fooo(4, 3, "赤船", true);
-                                        fooo(3, 2, "赤兵", true);
-                                        fooo(2, 2, "黒兵", true);
-                                        fooo(1, 3, "赤兵", true);
-                                        fooo(0, 3, "黒兵", true);
-                                        fooo(5, 2, "黒将", true);
-                                        fooo(6, 2, "赤車", true);
-                                        fooo(7, 2, "赤兵", true);
-                                        fooo(8, 2, "黒弓", true);
-                                        fooo(8, 1, "黒巫", true);
-                                        fooo(8, 0, "赤筆", true);
-                                        fooo(7, 0, "赤馬", true);
-                                        fooo(6, 1, "赤将", true);
-                                        fooo(5, 1, "黒虎", true);
-                                        fooo(3, 1, "黒車", true);
-                                        fooo(3, 0, "赤王", true);
-                                        fooo(1, 0, "黒馬", true);
-                                        fooo(0, 0, "黒筆", true);
-                                        fooo(0, 1, "赤巫", true);
-                                        fooo(1, 1, "赤弓", true);
-                                        fooo(4, 0, "赤虎", true);
+                                        var focus = "PO";
+                                        var board = {
+                                            PO: ["黒兵", false],
+                                            MO: ["赤兵", false],
+                                            CY: ["黒兵", false],
+                                            XY: ["赤兵", false],
+                                            ZY: ["黒将", false],
+                                            NY: ["黒兵", false],
+                                            CAI: ["黒車", false],
+                                            ZAI: ["黒船", false],
+                                            TAI: ["赤兵", false],
+                                            NAI: ["赤将", false],
+                                            LAI: ["赤兵", false],
+                                            KAI: ["黒兵", false],
+                                            KAU: ["黒巫", false],
+                                            LAU: ["黒弓", false],
+                                            NAU: ["赤車", false],
+                                            TAU: ["黒虎", false],
+                                            XAU: ["赤虎", false],
+                                            MAU: ["赤弓", false],
+                                            PAU: ["赤巫", false],
+                                            PIA: ["黒筆", false],
+                                            MIA: ["黒馬", false],
+                                            ZIA: ["黒王", false],
+                                            LIA: ["赤馬", false],
+                                            KIA: ["赤筆", false],
+                                            ZO: ["皇", null],
+                                            PU: ["黒兵", true],
+                                            CU: ["黒兵", true],
+                                            XU: ["赤兵", true],
+                                            ZU: ["赤船", true],
+                                            TI: ["赤兵", true],
+                                            NI: ["黒兵", true],
+                                            LU: ["赤兵", true],
+                                            KU: ["黒兵", true],
+                                            XI: ["黒将", true],
+                                            CI: ["赤車", true],
+                                            MI: ["赤兵", true],
+                                            PI: ["黒弓", true],
+                                            PE: ["黒巫", true],
+                                            PA: ["赤筆", true],
+                                            MA: ["赤馬", true],
+                                            CE: ["赤将", true],
+                                            XE: ["黒虎", true],
+                                            TE: ["黒車", true],
+                                            TA: ["赤王", true],
+                                            LA: ["黒馬", true],
+                                            KA: ["黒筆", true],
+                                            KE: ["赤巫", true],
+                                            LE: ["赤弓", true],
+                                            ZA: ["赤虎", true],
+                                        };
+                                        depict_board(board, focus);
                                     </script>
                                     <canvas id="cv" width="467" height="467"></canvas>
                                 </div>
