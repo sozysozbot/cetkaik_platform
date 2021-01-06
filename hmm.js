@@ -99,12 +99,12 @@ function depict_state(STATE) {
     document.getElementById("season_text").innerHTML = STATE.season;
     document.getElementById("turn_text").innerHTML = STATE.turn;
     document.getElementById("rate_text").innerHTML = STATE.rate;
-    document.getElementById("ia_side_player_name_short_text").innerHTML = STATE.ia_side_player_name_short;
-    document.getElementById("a_side_player_name_short_text").innerHTML = STATE.a_side_player_name_short;
-    document.getElementById("a_side_player_name_text").innerHTML = STATE.a_side_player_name;
-    document.getElementById("ia_side_player_name_text").innerHTML = STATE.ia_side_player_name;
-    document.getElementById("a_side_piece_stand").innerHTML = depict_hop1zuo1(STATE.a_side_hop1zuo1);
-    document.getElementById("ia_side_piece_stand").innerHTML = depict_hop1zuo1(STATE.ia_side_hop1zuo1);
+    document.getElementById("ia_side_player_name_short_text").innerHTML = STATE.ia_side.player_name_short;
+    document.getElementById("a_side_player_name_short_text").innerHTML = STATE.a_side.player_name_short;
+    document.getElementById("a_side_player_name_text").innerHTML = STATE.a_side.player_name;
+    document.getElementById("ia_side_player_name_text").innerHTML = STATE.ia_side.player_name;
+    document.getElementById("a_side_piece_stand").innerHTML = depict_hop1zuo1(STATE.a_side.hop1zuo1);
+    document.getElementById("ia_side_piece_stand").innerHTML = depict_hop1zuo1(STATE.ia_side.hop1zuo1);
     depict_board(STATE.board, STATE.focus);
 }
 
