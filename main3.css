@@ -922,7 +922,8 @@ table th {
     flex-direction: column;
     max-height: calc(100vh - 40px);
     overflow: hidden;
-    -ms-overflow-y: visible
+    -ms-overflow-y: visible;
+    overflow-y: visible;
 }
 
 .modal-card, .modal-card-head {
@@ -1773,7 +1774,7 @@ a.button {
     }
 }
 
-.cetkaik-player .flippable.flip, .cetkaik-player .piece_stand_outer.location_white, .cetkaik-player.theme-simple .board_inner td .piece_back .piece_fore.location_white {
+.cetkaik-player .flippable.flip, .cetkaik-player .piece_stand_outer.location_a_side, .cetkaik-player.theme-simple .board_inner td .piece_back .piece_fore.location_a_side {
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg)
 }
@@ -1858,7 +1859,7 @@ a.button {
     align-items: center
 }
 
-.cetkaik-player.vertical .flippable .piece_stand_outer .location_mark_wrap, .cetkaik-player.vertical .flippable .piece_stand_outer .location_mark_wrap .location_mark, .cetkaik-player.vertical .flippable .piece_stand_outer .piece_count, .cetkaik-player.vertical .flippable .piece_stand_outer .player_name {
+.cetkaik-player.vertical .flippable .piece_stand_outer .current_score_wrap, .cetkaik-player.vertical .flippable .piece_stand_outer .current_score_wrap .current_score, .cetkaik-player.vertical .flippable .piece_stand_outer .piece_count, .cetkaik-player.vertical .flippable .piece_stand_outer .player_name {
     display: inline-block
 }
 
@@ -1936,7 +1937,7 @@ a.button {
     position: relative
 }
 
-.cetkaik-player .piece_stand_outer .location_mark_wrap {
+.cetkaik-player .piece_stand_outer .current_score_wrap {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1945,7 +1946,7 @@ a.button {
     align-items: center
 }
 
-.cetkaik-player .piece_stand_outer .location_mark_wrap .piece_count {
+.cetkaik-player .piece_stand_outer .current_score_wrap .piece_count {
     vertical-align: middle
 }
 
@@ -1953,11 +1954,11 @@ a.button {
     text-align: left
 }
 
-.cetkaik-player .piece_stand_outer .location_mark {
+.cetkaik-player .piece_stand_outer .current_score {
     color: #636363
 }
 
-.cetkaik-player .piece_stand_outer.turn_active .location_mark {
+.cetkaik-player .piece_stand_outer.turn_active .current_score {
     color: #474747;
     -webkit-text-stroke: 1px #474747;
     text-shadow: 0 0 8px #474747;
