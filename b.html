@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="player_name has_player_name"><span
                                             id="a_side_player_name_short_text"></span></div>
-                                    <ul class="piece_stand"></ul>
+                                    <ul class="piece_stand" style="margin-top: 20px;" id="a_side_piece_stand"></ul>
                                 </div>
                                 <div style="position: relative; margin: 0 12px" id="pieces">
                                     <div id="pieces_inner">
@@ -58,7 +58,7 @@
                                         </div>
                                         <div class="player_name has_player_name"><span
                                                 id="ia_side_player_name_short_text"></span></div>
-                                        <ul class="piece_stand"></ul>
+                                        <ul class="piece_stand" style="margin-top: 20px;" id="ia_side_piece_stand"></ul>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
         </div>
     </div>
     <script>
-        var STATE = {
+        depict_state({
             season: "秋",
             turn: 29,
             rate: 4,
@@ -107,7 +107,6 @@
                 PO: ["黒兵", false],
                 MO: ["赤兵", false],
                 CY: ["黒兵", false],
-                XY: ["赤兵", false],
                 ZY: ["黒将", false],
                 NY: ["黒兵", false],
                 CAI: ["黒車", false],
@@ -120,7 +119,7 @@
                 LAU: ["黒弓", false],
                 NAU: ["赤車", false],
                 TAU: ["黒虎", false],
-                XAU: ["赤虎", false],
+                XAU: ["赤兵", true],
                 MAU: ["赤弓", false],
                 PAU: ["赤巫", false],
                 PIA: ["黒筆", false],
@@ -131,7 +130,6 @@
                 ZO: ["皇", null],
                 PU: ["黒兵", true],
                 CU: ["黒兵", true],
-                XU: ["赤兵", true],
                 ZU: ["赤船", true],
                 TI: ["赤兵", true],
                 NI: ["黒兵", true],
@@ -147,26 +145,19 @@
                 CE: ["赤将", true],
                 XE: ["黒虎", true],
                 TE: ["黒車", true],
-                TA: ["赤王", true],
-                LA: ["黒馬", true],
+                TA: ["赤王", true],             
                 KA: ["黒筆", true],
                 KE: ["赤巫", true],
                 LE: ["赤弓", true],
                 ZA: ["赤虎", true],
             },
-            ia_side_player_name_short: "筆", 
+            ia_side_player_name_short: "筆",
             a_side_player_name_short: "星",
             a_side_player_name: "星享青",
-            ia_side_player_name: "筆墨風"
-        };
-        document.getElementById("season_text").innerHTML = STATE.season;
-        document.getElementById("turn_text").innerHTML = STATE.turn;
-        document.getElementById("rate_text").innerHTML = STATE.rate;
-        document.getElementById("ia_side_player_name_short_text").innerHTML = STATE.ia_side_player_name_short;
-        document.getElementById("a_side_player_name_short_text").innerHTML = STATE.a_side_player_name_short;
-        document.getElementById("a_side_player_name_text").innerHTML = STATE.a_side_player_name;
-        document.getElementById("ia_side_player_name_text").innerHTML = STATE.ia_side_player_name;
-        depict_board(STATE.board, STATE.focus);
+            ia_side_player_name: "筆墨風",
+            a_side_hop1zuo1: ["赤兵", "赤虎"],
+            ia_side_hop1zuo1: ["黒馬"]
+        });
     </script>
 </body>
 

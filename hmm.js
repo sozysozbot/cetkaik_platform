@@ -85,6 +85,41 @@ function depict_board(board, focus) {
 const profs = [
     "船", "無", "兵", "弓", "車", "虎", "馬", "筆", "巫", "将", "王", "皇"
 ];
+
+function depict_hop1zuo1(pieces) {
+    let ans = "";
+    for (let i = 0; i < pieces.length; i++) {
+        const [color, prof] = pieces[i];
+        ans += `<li><div style="width: 23px; height: 43px; transform: scale(0.26); transform-origin: top left">${barr(color, prof, false)}</div></li>`;
+    }
+    return ans
+}
+
+function depict_state(STATE) {
+    document.getElementById("season_text").innerHTML = STATE.season;
+    document.getElementById("turn_text").innerHTML = STATE.turn;
+    document.getElementById("rate_text").innerHTML = STATE.rate;
+    document.getElementById("ia_side_player_name_short_text").innerHTML = STATE.ia_side_player_name_short;
+    document.getElementById("a_side_player_name_short_text").innerHTML = STATE.a_side_player_name_short;
+    document.getElementById("a_side_player_name_text").innerHTML = STATE.a_side_player_name;
+    document.getElementById("ia_side_player_name_text").innerHTML = STATE.ia_side_player_name;
+    document.getElementById("a_side_piece_stand").innerHTML = depict_hop1zuo1(STATE.a_side_hop1zuo1);
+    document.getElementById("ia_side_piece_stand").innerHTML = depict_hop1zuo1(STATE.ia_side_hop1zuo1);
+    depict_board(STATE.board, STATE.focus);
+}
+
+function barr(color, prof, is_bold) {
+    const x = profs.indexOf(prof) * -100 - 27;
+    const y = is_bold ? 0 : -277;
+    const color_path = {
+        "黒": "ゴシック駒",
+        "赤": "ゴシック駒_赤",
+    }[color];
+    return `<div
+    style="width: 87px; height: 87px; background-position-x: ${x}px; background-position-y: ${y}px; background-image: url(${color_path}.svg); ">
+</div>`
+}
+
 function fooo(coord, color_and_prof, rotated, is_bold) {
     const column = {
         K: 0,
@@ -105,28 +140,15 @@ function fooo(coord, color_and_prof, rotated, is_bold) {
     const left = left_margin + 43 * (column - 0.5);
     const top = top_margin + 43 * (row - 0.5);
     if (color_and_prof === "皇") {
-        const x = profs.indexOf("皇") * -100 - 27;
-        const y = is_bold ? 0 : -277;
-        const color_path = "ゴシック駒";
         return `
         <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${"rotate(90deg)"}">
-            <div
-                style="width: 87px; height: 87px; background-position-x: ${x}px; background-position-y: ${y}px; background-image: url(${color_path}.svg); ">
-            </div>
+            ${barr("黒", "皇", is_bold)}
         </div>`;
     } else {
         const [color, prof] = color_and_prof;
-        const x = profs.indexOf(prof) * -100 - 27;
-        const y = is_bold ? 0 : -277;
-        const color_path = {
-            "黒": "ゴシック駒",
-            "赤": "ゴシック駒_赤",
-        }[color];
         return `
         <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${rotated ? "rotate(180deg)" : ""}">
-            <div
-                style="width: 87px; height: 87px; background-position-x: ${x}px; background-position-y: ${y}px; background-image: url(${color_path}.svg); ">
-            </div>
+            ${barr(color, prof, is_bold)}
         </div>`;
     }
 
