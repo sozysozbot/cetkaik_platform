@@ -756,118 +756,12 @@ span {
     padding: 20px
 }
 
-.has-text-link {
-    color: #3273dc!important
-}
-
-a.has-text-link:focus, a.has-text-link:hover {
-    color: #205bbc!important
-}
-
 .has-background-link {
     background-color: #3273dc!important
 }
 
 .is-paddingless {
     padding: 0!important
-}
-
-.px-0 {
-    padding-left: 0!important
-}
-
-.px-0 {
-    padding-right: 0!important
-}
-
-.px-1 {
-    padding-left: 4px!important;
-    padding-left: .25rem!important
-}
-
-.px-1 {
-    padding-right: 4px!important;
-    padding-right: .25rem!important
-}
-
-.px-2 {
-    padding-left: 8px!important;
-    padding-left: .5rem!important
-}
-
-.px-2 {
-    padding-right: 8px!important;
-    padding-right: .5rem!important
-}
-
-.px-3 {
-    padding-left: 12px!important;
-    padding-left: .75rem!important
-}
-
-.px-3 {
-    padding-right: 12px!important;
-    padding-right: .75rem!important
-}
-
-.px-4 {
-    padding-left: 16px!important;
-    padding-left: 1rem!important
-}
-
-.px-4 {
-    padding-right: 16px!important;
-    padding-right: 1rem!important
-}
-
-.px-5 {
-    padding-left: 24px!important;
-    padding-left: 1.5rem!important
-}
-
-.px-5 {
-    padding-right: 24px!important;
-    padding-right: 1.5rem!important
-}
-
-.px-6 {
-    padding-left: 48px!important;
-    padding-left: 3rem!important
-}
-
-.px-6 {
-    padding-right: 48px!important;
-    padding-right: 3rem!important
-}
-
-.is-size-1 {
-    font-size: 76.8px!important;
-    font-size: 4.8rem!important
-}
-
-.is-size-2 {
-    font-size: 64px!important;
-    font-size: 4rem!important
-}
-
-.is-size-3 {
-    font-size: 51.2px!important;
-    font-size: 3.2rem!important
-}
-
-.is-size-4 {
-    font-size: 38.4px!important;
-    font-size: 2.4rem!important
-}
-
-.is-size-5 {
-    font-size: 32px!important;
-    font-size: 2rem!important
-}
-
-.is-size-6 {
-    font-size: 25.6px!important;
-    font-size: 1.6rem!important
 }
 
 .is-size-7 {
@@ -877,14 +771,6 @@ a.has-text-link:focus, a.has-text-link:hover {
 
 .has-text-centered {
     text-align: center!important
-}
-
-.has-text-left {
-    text-align: left!important
-}
-
-.has-text-right {
-    text-align: right!important
 }
 
 .is-flex {
