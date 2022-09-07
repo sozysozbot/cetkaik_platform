@@ -1,4 +1,4 @@
-import { BodyElement, Parsed } from "cerke_online_kiaak_parser";
+import { BodyElement, Parsed, CiurlEvent } from "cerke_online_kiaak_parser";
 import { Board, NonTamPiece, State } from "./types";
 import { AbsoluteCoord } from "cerke_online_api";
 
@@ -91,6 +91,7 @@ function getInitialState(o: {
 		focus: null,
 		focus_stepped: null,
 		focus_src: null,
+		focus_planned_dest: null,
 		board: getInitialBoard(),
 		ia_side: {
 			player_name_short: o.ia_side.player_name_short,
@@ -140,6 +141,19 @@ function set_hop1zuo1(state: State, piece: NonTamPiece) {
 	}
 }
 
+function isSuccessfullyCompleted(ciurl_event: CiurlEvent): boolean {
+	if (ciurl_event.type === "no_ciurl_event") {
+		return true;
+	} else if (ciurl_event.type === "only_stepping") {
+		return ciurl_event.infafterstep_success;
+	} else if (ciurl_event.type === "has_water_entry") {
+		return ciurl_event.water_entry_ciurl >= 3;
+	} else {
+		const _: never = ciurl_event;
+		throw new Error("Should not reach here: invalid value in ciurl_event.type")
+	}
+}
+
 export function getNextState(current_state: Readonly<State>, body_element: BodyElement): State | null {
 	const new_state: State = JSON.parse(JSON.stringify(current_state));
 
@@ -161,10 +175,17 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 						(() => { throw new Error() })();
 		new_state.turn = 0;
 		return new_state;
+	} else if (body_element.type === "from_hopzuo") {
+
 	} else if (body_element.type === "normal_move") {
-		if (body_element.movement.type === "NonTamMove") {
-			if (body_element.movement.data.type === "SrcDst") {
-				// TODO: body_element.ciurl_and_capture
+		const ciurl_and_capture = body_element.ciurl_and_capture;
+		ciurl_and_capture.ciurl_event;
+
+		new_state.turn++;
+		new_state.focus_src = body_element.movement.data.src;
+
+		if (body_element.movement.data.type === "SrcDst") {
+			if (isSuccessfullyCompleted(body_element.ciurl_and_capture.ciurl_event)) {
 				const piece = remove_from(new_state, body_element.movement.data.src);
 				const maybe_captured_piece = set_to(new_state, body_element.movement.data.dest, piece);
 				if (maybe_captured_piece) {
@@ -172,10 +193,15 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 				}
 				new_state.focus = body_element.movement.data.dest;
 				new_state.focus_stepped = null;
-				new_state.focus_src = body_element.movement.data.src;
-				new_state.turn++;
-			} else if (body_element.movement.data.type === "SrcStepDstFinite") {
-				// TODO: body_element.ciurl_and_capture
+				new_state.focus_planned_dest = body_element.movement.data.dest;
+			} else {
+				// failed attempt
+				new_state.focus = body_element.movement.data.src;
+				new_state.focus_stepped = null;
+				new_state.focus_planned_dest = body_element.movement.data.dest;
+			}
+		} else if (body_element.movement.data.type === "SrcStepDst") {
+			if (isSuccessfullyCompleted(body_element.ciurl_and_capture.ciurl_event)) {
 				const piece = remove_from(new_state, body_element.movement.data.src);
 				const maybe_captured_piece = set_to(new_state, body_element.movement.data.dest, piece);
 				if (maybe_captured_piece) {
@@ -183,20 +209,16 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 				}
 				new_state.focus = body_element.movement.data.dest;
 				new_state.focus_stepped = body_element.movement.data.step;
-				new_state.focus_src = body_element.movement.data.src;
-				new_state.turn++;
-			} else if (body_element.movement.data.type === "FromHand") {
-
+				new_state.focus_planned_dest = body_element.movement.data.dest;
+			} else {
+				// failed attempt
+				new_state.focus = body_element.movement.data.src;
+				new_state.focus_stepped = body_element.movement.data.step;
+				new_state.focus_planned_dest = body_element.movement.data.dest;
 			}
-			else {
-				const _: never = body_element.movement.data;
-				throw new Error(`Should not reach here: invalid value in body_element.movement.data.type`);
-			}
-		} else if (body_element.movement.type === "TamMove") {
-
 		} else {
-			const _: never = body_element.movement;
-			throw new Error(`Should not reach here: invalid value in body_element.movement.type`);
+			const _: never = body_element.movement.data;
+			throw new Error(`Should not reach here: invalid value in body_element.movement.data.type`);
 		}
 	} else if (body_element.type === "end_season") {
 
@@ -205,6 +227,8 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 	} else if (body_element.type === "taxot") {
 
 	} else if (body_element.type === "tymok") {
+
+	} else if (body_element.type === "tam_move") {
 
 	} else {
 		const _: never = body_element;

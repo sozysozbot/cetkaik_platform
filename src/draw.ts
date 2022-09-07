@@ -98,11 +98,27 @@ function get_top_left(coord: AbsoluteCoord) {
     return { left, top }
 }
 
-export function drawFocusStepped(focus_stepped: AbsoluteCoord | null) {
-    if (!focus_stepped) return;
+export function drawFocusPlannedDest(focus_planned_dest: AbsoluteCoord | null): string {
+    if (!focus_planned_dest) return "";
+    const circle_radius = 18;
+    const { top, left } = get_top_left(focus_planned_dest);
+    return `
+    <div style="
+        position: absolute; 
+        left: ${left + cell_size - circle_radius}px;
+        top: ${top + cell_size - circle_radius}px;
+        width: ${circle_radius * 2}px; 
+        height: ${circle_radius * 2}px; 
+        border-radius: 25%; 
+        background-color: rgb(178, 255, 255)
+    "></div>`;
+}
+
+export function drawFocusStepped(focus_stepped: AbsoluteCoord | null): string {
+    if (!focus_stepped) return "";
     const circle_radius = 18;
     const { top, left } = get_top_left(focus_stepped);
-    document.getElementById("pieces_inner")!.innerHTML += `
+    return `
     <div style="
         position: absolute; 
         left: ${left + cell_size - circle_radius}px;
@@ -114,11 +130,11 @@ export function drawFocusStepped(focus_stepped: AbsoluteCoord | null) {
     "></div>`;
 }
 
-export function drawFocusSrc(focus_src: AbsoluteCoord | null) {
-    if (!focus_src) return;
+export function drawFocusSrc(focus_src: AbsoluteCoord | null): string {
+    if (!focus_src) return "";
     const circle_radius = 18;
     const { top, left } = get_top_left(focus_src);
-    document.getElementById("pieces_inner")!.innerHTML += `
+    return `
     <div style="
         position: absolute; 
         left: ${left + cell_size - circle_radius}px;
@@ -130,7 +146,7 @@ export function drawFocusSrc(focus_src: AbsoluteCoord | null) {
     "></div>`;
 }
 
-export function drawPiecesOnBoard(board: Board, focus: AbsoluteCoord | null) {
+function drawPiecesOnBoard(board: Board, focus: AbsoluteCoord | null): string {
     let ans = "";
     for (const clm in board) {
         for (const rw in board[clm as AbsoluteColumn]) {
@@ -144,7 +160,7 @@ export function drawPiecesOnBoard(board: Board, focus: AbsoluteCoord | null) {
         }
     }
 
-    document.getElementById("pieces_inner")!.innerHTML = ans;
+    return ans;
 }
 
 
@@ -188,9 +204,10 @@ export function drawGameState(STATE: State) {
     document.getElementById("ia_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.ia_side.hop1zuo1, STATE.ia_side.is_newly_acquired);
     document.getElementById("a_side_current_score")!.innerHTML = STATE.a_side.score + "";
     document.getElementById("ia_side_current_score")!.innerHTML = STATE.ia_side.score + "";
-    drawPiecesOnBoard(STATE.board, STATE.focus);
-    drawFocusStepped(STATE.focus_stepped);
-    drawFocusSrc(STATE.focus_src);
+    document.getElementById("pieces_inner")!.innerHTML = drawFocusStepped(STATE.focus_stepped) +
+        drawFocusSrc(STATE.focus_src) +
+        drawFocusPlannedDest(STATE.focus_planned_dest) +
+        drawPiecesOnBoard(STATE.board, STATE.focus);
 }
 
 function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {
