@@ -1,6 +1,7 @@
-import { BodyElement } from 'cerke_online_kiaak_parser';
+import { BodyElement, parseCerkeOnlineKia1Ak1, Parsed } from 'cerke_online_kiaak_parser';
 import { drawEmptyBoard, drawGameState } from './draw';
-import { getNthState } from './state';
+import { getAllStatesFromParsed, getNthState } from './state';
+import { State } from './types';
 
 window.addEventListener('load', () => {
     const case1 =
@@ -53,13 +54,16 @@ TY虎NOLU無撃裁手赤兵
 
 星一周`;
 
+    const parsed: Parsed = parseCerkeOnlineKia1Ak1(case1);
+    const states: State[] = getAllStatesFromParsed(parsed);
+
     drawEmptyBoard();
     const turn_slider = document.getElementById("turn_slider")! as HTMLInputElement;
-    turn_slider.min = "1";
-    turn_slider.max = "45";
-    turn_slider.value = "29";
-    drawGameState(getNthState(29));
+    turn_slider.min = "0";
+    turn_slider.max = `${states.length - 1}`;
+    turn_slider.value = "0";
+    drawGameState(states[0]);
     turn_slider.oninput = () => {
-        drawGameState(getNthState(Number(turn_slider.value)));
+        drawGameState(states[Number(turn_slider.value)]);
     }
 });

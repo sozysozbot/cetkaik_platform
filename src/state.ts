@@ -1,3 +1,4 @@
+import { BodyElement, Parsed } from "cerke_online_kiaak_parser";
 import { State } from "./types";
 
 function getInitialState(o: {
@@ -12,7 +13,7 @@ function getInitialState(o: {
 }): State {
 	return {
 		season: "春",
-		turn: 1,
+		turn: 0,
 		rate: 1,
 		focus: null,
 		board: {
@@ -97,6 +98,38 @@ function getInitialState(o: {
 			score: 20,
 		},
 	}
+}
+
+export function getNextState(current_state: Readonly<State>, body_element: BodyElement): State | null {
+	const new_state: State = JSON.parse(JSON.stringify(current_state));
+	if (body_element.type === "season_ends") {
+		if (current_state.season === "冬") {
+			return null;
+		}
+		new_state.season =
+			current_state.season === "春" ? "夏" :
+				current_state.season === "夏" ? "秋" :
+					current_state.season === "秋" ? "冬" :
+						(() => { throw new Error() })();
+		new_state.turn = 0;
+		return new_state;
+	}
+	return new_state;
+}
+
+export function getAllStatesFromParsed(parsed: Readonly<Parsed>): State[] {
+	const ans: State[] = [];
+	let current_state = getInitialState({
+		ia_side: { player_name_short: "張", player_name: "張三" },
+		a_side: { player_name_short: "李", player_name: "李四" }
+	});
+	for (let i = 0; i < parsed.parsed_bodies.length; i++) {
+		const next_state = getNextState(current_state, parsed.parsed_bodies[i]);
+		if (!next_state) break;
+		ans.push(next_state);
+		current_state = next_state;
+	}
+	return ans;
 }
 
 export function getNthState(n: number): State {
