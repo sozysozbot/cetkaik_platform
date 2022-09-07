@@ -16,7 +16,7 @@ export type State = {
 	season: HanziSeason,
 	turn: number,
 	rate: Rate,
-	focus: [AbsoluteColumn, AbsoluteRow],
+	focus: [AbsoluteColumn, AbsoluteRow] | null,
 	board: Board,
 	ia_side: {
 		player_name_short: string,

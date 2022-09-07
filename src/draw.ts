@@ -76,11 +76,18 @@ export function drawEmptyBoard() {
 
 }
 
-export function drawPiecesOnBoard(board: Board, focus: [AbsoluteColumn, AbsoluteRow]) {
+export function drawPiecesOnBoard(board: Board, focus: [AbsoluteColumn, AbsoluteRow] | null) {
     let ans = "";
     for (const clm in board) {
-        for (const rw in board[clm as AbsoluteColumn])
-            ans += positionPieceOnBoard(clm as AbsoluteColumn, rw as AbsoluteRow, board[clm as AbsoluteColumn]![rw as AbsoluteRow]!, focus[0] == clm && focus[1] == rw);
+        for (const rw in board[clm as AbsoluteColumn]) {
+            const is_focused = focus ? focus[0] == clm && focus[1] == rw : false;
+            ans += positionPieceOnBoard(
+                clm as AbsoluteColumn,
+                rw as AbsoluteRow,
+                board[clm as AbsoluteColumn]![rw as AbsoluteRow]!,
+                is_focused
+            );
+        }
     }
 
     document.getElementById("pieces_inner")!.innerHTML = ans;

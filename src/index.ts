@@ -2,7 +2,116 @@ import { BodyElement } from 'cerke_online_kiaak_parser';
 import { drawEmptyBoard, drawGameState } from './draw';
 import { State } from './types';
 
+function getInitialState(o: {
+    ia_side: {
+        player_name_short: string,
+        player_name: string
+    },
+    a_side: {
+        player_name_short: string,
+        player_name: string,
+    },
+}): State {
+    return {
+        season: "春",
+        turn: 1,
+        rate: 1,
+        focus: null,
+        board: {
+            K: {
+                A: { color: "黒", prof: "筆", is_aside: true },
+                E: { color: "赤", prof: "巫", is_aside: true },
+                I: { color: "黒", prof: "兵", is_aside: true },
+                AI: { color: "黒", prof: "兵", is_aside: false },
+                AU: { color: "黒", prof: "巫", is_aside: false },
+                IA: { color: "赤", prof: "筆", is_aside: false },
+            },
+            L: {
+                A: { color: "黒", prof: "馬", is_aside: true },
+                E: { color: "赤", prof: "弓", is_aside: true },
+                I: { color: "赤", prof: "兵", is_aside: true },
+                AI: { color: "赤", prof: "兵", is_aside: false },
+                AU: { color: "黒", prof: "弓", is_aside: false },
+                IA: { color: "赤", prof: "馬", is_aside: false },
+            },
+            N: {
+                A: { color: "黒", prof: "車", is_aside: true },
+                I: { color: "黒", prof: "兵", is_aside: true },
+                AI: { color: "黒", prof: "兵", is_aside: false },
+                IA: { color: "赤", prof: "車", is_aside: false },
+            },
+            T: {
+                A: { color: "黒", prof: "将", is_aside: true },
+                E: { color: "赤", prof: "虎", is_aside: true },
+                I: { color: "赤", prof: "兵", is_aside: true },
+                AI: { color: "赤", prof: "兵", is_aside: false },
+                AU: { color: "黒", prof: "虎", is_aside: false },
+                IA: { color: "赤", prof: "将", is_aside: false },
+            },
+            Z: {
+                A: { color: "赤", prof: "王", is_aside: true },
+                I: { color: "赤", prof: "船", is_aside: true },
+                O: "皇",
+                AI: { color: "黒", prof: "船", is_aside: false },
+                IA: { color: "黒", prof: "王", is_aside: false },
+            },
+            X: {
+                A: { color: "赤", prof: "将", is_aside: true },
+                E: { color: "黒", prof: "虎", is_aside: true },
+                I: { color: "赤", prof: "兵", is_aside: true },
+                AI: { color: "赤", prof: "兵", is_aside: false },
+                AU: { color: "赤", prof: "虎", is_aside: false },
+                IA: { color: "黒", prof: "将", is_aside: false },
+            },
+            C: {
+                A: { color: "赤", prof: "車", is_aside: true },
+                I: { color: "黒", prof: "兵", is_aside: true },
+                AI: { color: "黒", prof: "兵", is_aside: false },
+                IA: { color: "黒", prof: "車", is_aside: false },
+            },
+            M: {
+                A: { color: "赤", prof: "馬", is_aside: true },
+                E: { color: "黒", prof: "弓", is_aside: true },
+                I: { color: "赤", prof: "兵", is_aside: true },
+                AI: { color: "赤", prof: "兵", is_aside: false },
+                AU: { color: "赤", prof: "弓", is_aside: false },
+                IA: { color: "黒", prof: "馬", is_aside: false },
+            },
+            P: {
+                A: { color: "赤", prof: "筆", is_aside: true },
+                E: { color: "黒", prof: "巫", is_aside: true },
+                I: { color: "黒", prof: "兵", is_aside: true },
+                AI: { color: "黒", prof: "兵", is_aside: false },
+                AU: { color: "赤", prof: "巫", is_aside: false },
+                IA: { color: "黒", prof: "筆", is_aside: false },
+            }
+        },
+        ia_side: {
+            player_name_short: o.ia_side.player_name_short,
+            hop1zuo1: [],
+            player_name: o.ia_side.player_name
+        },
+        a_side: {
+            player_name_short: o.a_side.player_name_short,
+            player_name: o.a_side.player_name,
+            hop1zuo1: []
+        },
+    }
+}
+
 function getNthState(n: number): State {
+    if (n == 1) {
+        return getInitialState({
+            ia_side: {
+                player_name_short: "筆",
+                player_name: "筆墨風"
+            },
+            a_side: {
+                player_name_short: "星",
+                player_name: "星享青",
+            }
+        })
+    }
     return {
         season: "秋",
         turn: n,
