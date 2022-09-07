@@ -1,5 +1,5 @@
 import { AbsoluteColumn, AbsoluteRow } from "cerke_online_api";
-import { ColorAndProf, State, HanziProfessionAndTam, profs } from "./types";
+import { NonTamPiece, State, HanziProfessionAndTam, profs, Board } from "./types";
 
 export const height = 387;
 export const left_margin = 40;
@@ -76,7 +76,7 @@ export function drawEmptyBoard() {
 
 }
 
-export function drawPiecesOnBoard(board: { [key in AbsoluteColumn]?: { [key in AbsoluteRow]?: [ColorAndProf, boolean] | "皇" } }, focus: [AbsoluteColumn, AbsoluteRow]) {
+export function drawPiecesOnBoard(board: Board, focus: [AbsoluteColumn, AbsoluteRow]) {
     let ans = "";
     for (const clm in board) {
         for (const rw in board[clm as AbsoluteColumn])
@@ -87,7 +87,7 @@ export function drawPiecesOnBoard(board: { [key in AbsoluteColumn]?: { [key in A
 }
 
 
-function getHop1Zuo1HTML(pieces: ColorAndProf[]) {
+function getHop1Zuo1HTML(pieces: NonTamPiece[]) {
     let ans = "";
     for (let i = 0; i < pieces.length; i++) {
         const { color, prof } = pieces[i];
@@ -122,7 +122,7 @@ function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is
 }
 
 
-function positionPieceOnBoard(clm: AbsoluteColumn, rw: AbsoluteRow, color_and_prof_and_rotated: [ColorAndProf, boolean] | "皇", is_bold: boolean) {
+function positionPieceOnBoard(clm: AbsoluteColumn, rw: AbsoluteRow, piece: NonTamPiece | "皇", is_bold: boolean) {
     const column = {
         K: 0,
         L: 1,
@@ -141,15 +141,15 @@ function positionPieceOnBoard(clm: AbsoluteColumn, rw: AbsoluteRow, color_and_pr
     }[rw];
     const left = left_margin + 43 * (column - 0.5);
     const top = top_margin + 43 * (row - 0.5);
-    if (color_and_prof_and_rotated === "皇") {
+    if (piece === "皇") {
         return `
         <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${"rotate(90deg)"}">
             ${renderNormalPiece("黒", "皇", is_bold)}
         </div>`;
     } else {
-        const [{ color, prof }, rotated] = color_and_prof_and_rotated;
+        const { color, prof, is_aside } = piece;
         return `
-        <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${rotated ? "rotate(180deg)" : ""}">
+        <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${is_aside ? "rotate(180deg)" : ""}">
             ${renderNormalPiece(color, prof, is_bold)}
         </div>`;
     }

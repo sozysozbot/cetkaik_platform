@@ -1,5 +1,5 @@
 import { BodyElement } from 'cerke_online_kiaak_parser';
-import { drawEmptyBoard, drawGameState, left_margin, top_margin } from './draw';
+import { drawEmptyBoard, drawGameState } from './draw';
 import { State } from './types';
 
 function getNthState(n: number): State {
@@ -10,79 +10,79 @@ function getNthState(n: number): State {
         focus: ["P", "O"],
         board: {
             C: {
-                AI: [{ color: "黒", prof: "車" }, false],
-                E: [{ color: "赤", prof: "将" }, true],
-                I: [{ color: "赤", prof: "車" }, true],
-                U: [{ color: "黒", prof: "兵" }, true],
-                Y: [{ color: "黒", prof: "兵" }, false],
+                AI: { color: "黒", prof: "車", is_aside: false },
+                E: { color: "赤", prof: "将", is_aside: true },
+                I: { color: "赤", prof: "車", is_aside: true },
+                U: { color: "黒", prof: "兵", is_aside: true },
+                Y: { color: "黒", prof: "兵", is_aside: false },
             },
             K: {
-                A: [{ color: "黒", prof: "筆" }, true],
-                AI: [{ color: "黒", prof: "兵" }, false],
-                AU: [{ color: "黒", prof: "巫" }, false],
-                E: [{ color: "赤", prof: "巫" }, true],
-                IA: [{ color: "赤", prof: "筆" }, false],
-                U: [{ color: "黒", prof: "兵" }, true]
+                A: { color: "黒", prof: "筆", is_aside: true },
+                AI: { color: "黒", prof: "兵", is_aside: false },
+                AU: { color: "黒", prof: "巫", is_aside: false },
+                E: { color: "赤", prof: "巫", is_aside: true },
+                IA: { color: "赤", prof: "筆", is_aside: false },
+                U: { color: "黒", prof: "兵", is_aside: true }
             },
             L: {
-                AI: [{ color: "赤", prof: "兵" }, false],
-                AU: [{ color: "黒", prof: "弓" }, false],
-                E: [{ color: "赤", prof: "弓" }, true],
-                IA: [{ color: "赤", prof: "馬" }, false],
-                U: [{ color: "赤", prof: "兵" }, true]
+                AI: { color: "赤", prof: "兵", is_aside: false },
+                AU: { color: "黒", prof: "弓", is_aside: false },
+                E: { color: "赤", prof: "弓", is_aside: true },
+                IA: { color: "赤", prof: "馬", is_aside: false },
+                U: { color: "赤", prof: "兵", is_aside: true }
             },
             M: {
-                A: [{ color: "赤", prof: "馬" }, true],
-                AU: [{ color: "赤", prof: "弓" }, false],
-                I: [{ color: "赤", prof: "兵" }, true],
-                IA: [{ color: "黒", prof: "馬" }, false],
-                O: [{ color: "赤", prof: "兵" }, false]
+                A: { color: "赤", prof: "馬", is_aside: true },
+                AU: { color: "赤", prof: "弓", is_aside: false },
+                I: { color: "赤", prof: "兵", is_aside: true },
+                IA: { color: "黒", prof: "馬", is_aside: false },
+                O: { color: "赤", prof: "兵", is_aside: false }
             },
             N: {
-                AI: [{ color: "赤", prof: "将" }, false],
-                AU: [{ color: "赤", prof: "車" }, false],
-                I: [{ color: "黒", prof: "兵" }, true],
-                Y: [{ color: "黒", prof: "兵" }, false]
+                AI: { color: "赤", prof: "将", is_aside: false },
+                AU: { color: "赤", prof: "車", is_aside: false },
+                I: { color: "黒", prof: "兵", is_aside: true },
+                Y: { color: "黒", prof: "兵", is_aside: false }
             },
             P: {
-                A: [{ color: "赤", prof: "筆" }, true],
-                AU: [{ color: "赤", prof: "巫" }, false],
-                E: [{ color: "黒", prof: "巫" }, true],
-                I: [{ color: "黒", prof: "弓" }, true],
-                IA: [{ color: "黒", prof: "筆" }, false],
-                U: [{ color: "黒", prof: "兵" }, true],
-                O: [{ color: "黒", prof: "兵" }, false]
+                A: { color: "赤", prof: "筆", is_aside: true },
+                AU: { color: "赤", prof: "巫", is_aside: false },
+                E: { color: "黒", prof: "巫", is_aside: true },
+                I: { color: "黒", prof: "弓", is_aside: true },
+                IA: { color: "黒", prof: "筆", is_aside: false },
+                U: { color: "黒", prof: "兵", is_aside: true },
+                O: { color: "黒", prof: "兵", is_aside: false },
             },
             T: {
-                A: [{ color: "赤", prof: "王" }, true],
-                AI: [{ color: "赤", prof: "兵" }, false],
-                AU: [{ color: "黒", prof: "虎" }, false],
-                E: [{ color: "黒", prof: "車" }, true],
-                I: [{ color: "赤", prof: "兵" }, true]
+                A: { color: "赤", prof: "王", is_aside: true },
+                AI: { color: "赤", prof: "兵", is_aside: false },
+                AU: { color: "黒", prof: "虎", is_aside: false },
+                E: { color: "黒", prof: "車", is_aside: true },
+                I: { color: "赤", prof: "兵", is_aside: true }
             },
             X: {
-                AU: [{ color: "赤", prof: "兵" }, true],
-                E: [{ color: "黒", prof: "虎" }, true],
-                I: [{ color: "黒", prof: "将" }, true]
+                AU: { color: "赤", prof: "兵", is_aside: true },
+                E: { color: "黒", prof: "虎", is_aside: true },
+                I: { color: "黒", prof: "将", is_aside: true }
             },
             Z: {
-                A: [{ color: "赤", prof: "虎" }, true],
-                AI: [{ color: "黒", prof: "船" }, false],
-                IA: [{ color: "黒", prof: "王" }, false],
+                A: { color: "赤", prof: "虎", is_aside: true },
+                AI: { color: "黒", prof: "船", is_aside: false },
+                IA: { color: "黒", prof: "王", is_aside: false },
                 O: "皇",
-                U: [{ color: "赤", prof: "船" }, true],
-                Y: [{ color: "黒", prof: "将" }, false]
+                U: { color: "赤", prof: "船", is_aside: true },
+                Y: { color: "黒", prof: "将", is_aside: false }
             },
         },
         ia_side: {
             player_name_short: "筆",
-            hop1zuo1: [{ color: "黒", prof: "馬" }],
+            hop1zuo1: [{ color: "黒", prof: "馬", is_aside: false }],
             player_name: "筆墨風"
         },
         a_side: {
             player_name_short: "星",
             player_name: "星享青",
-            hop1zuo1: [{ color: "赤", prof: "兵" }, { color: "赤", prof: "虎" }]
+            hop1zuo1: [{ color: "赤", prof: "兵", is_aside: true }, { color: "赤", prof: "虎", is_aside: true }]
         },
 
     };
