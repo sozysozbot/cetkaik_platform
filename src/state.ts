@@ -88,10 +88,12 @@ function getInitialState(o: {
 		season: "春",
 		turn: 0,
 		rate: 1,
-		focus: null,
-		focus_stepped: null,
-		focus_src: null,
-		focus_planned_dest: null,
+		focus: {
+			actual_dest: null,
+			stepped: null,
+			src: null,
+			planned_dest: null
+		},
 		board: getInitialBoard(),
 		ia_side: {
 			player_name_short: o.ia_side.player_name_short,
@@ -160,9 +162,12 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 	// clear the flags
 	new_state.ia_side.is_newly_acquired = false;
 	new_state.a_side.is_newly_acquired = false;
-	new_state.focus_src = null;
-	new_state.focus = null;
-	new_state.focus_stepped = null;
+	new_state.focus = {
+		src: null,
+		actual_dest: null,
+		stepped: null,
+		planned_dest: null
+	};
 
 	if (body_element.type === "season_ends") {
 		if (current_state.season === "冬") {
@@ -178,12 +183,7 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 	} else if (body_element.type === "from_hopzuo") {
 
 	} else if (body_element.type === "normal_move") {
-		const ciurl_and_capture = body_element.ciurl_and_capture;
-		ciurl_and_capture.ciurl_event;
-
 		new_state.turn++;
-		new_state.focus_src = body_element.movement.data.src;
-
 		if (body_element.movement.data.type === "SrcDst") {
 			if (isSuccessfullyCompleted(body_element.ciurl_and_capture.ciurl_event)) {
 				const piece = remove_from(new_state, body_element.movement.data.src);
@@ -191,14 +191,20 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 				if (maybe_captured_piece) {
 					set_hop1zuo1(new_state, maybe_captured_piece)
 				}
-				new_state.focus = body_element.movement.data.dest;
-				new_state.focus_stepped = null;
-				new_state.focus_planned_dest = body_element.movement.data.dest;
+				new_state.focus = {
+					src: body_element.movement.data.src,
+					actual_dest: body_element.movement.data.dest,
+					stepped: null,
+					planned_dest: body_element.movement.data.dest
+				};
 			} else {
 				// failed attempt
-				new_state.focus = body_element.movement.data.src;
-				new_state.focus_stepped = null;
-				new_state.focus_planned_dest = body_element.movement.data.dest;
+				new_state.focus = {
+					src: body_element.movement.data.src,
+					actual_dest: body_element.movement.data.src,
+					stepped: null,
+					planned_dest: body_element.movement.data.dest
+				};
 			}
 		} else if (body_element.movement.data.type === "SrcStepDst") {
 			if (isSuccessfullyCompleted(body_element.ciurl_and_capture.ciurl_event)) {
@@ -207,14 +213,19 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 				if (maybe_captured_piece) {
 					set_hop1zuo1(new_state, maybe_captured_piece)
 				}
-				new_state.focus = body_element.movement.data.dest;
-				new_state.focus_stepped = body_element.movement.data.step;
-				new_state.focus_planned_dest = body_element.movement.data.dest;
+				new_state.focus = {
+					actual_dest: body_element.movement.data.dest,
+					stepped: body_element.movement.data.step,
+					planned_dest: body_element.movement.data.dest,
+					src: body_element.movement.data.src
+				};
 			} else {
 				// failed attempt
-				new_state.focus = body_element.movement.data.src;
-				new_state.focus_stepped = body_element.movement.data.step;
-				new_state.focus_planned_dest = body_element.movement.data.dest;
+				new_state.focus = {
+					actual_dest: body_element.movement.data.src,
+					stepped: body_element.movement.data.step,
+					planned_dest: body_element.movement.data.dest, src: body_element.movement.data.src
+				};
 			}
 		} else {
 			const _: never = body_element.movement.data;

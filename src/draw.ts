@@ -204,10 +204,10 @@ export function drawGameState(STATE: State) {
     document.getElementById("ia_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.ia_side.hop1zuo1, STATE.ia_side.is_newly_acquired);
     document.getElementById("a_side_current_score")!.innerHTML = STATE.a_side.score + "";
     document.getElementById("ia_side_current_score")!.innerHTML = STATE.ia_side.score + "";
-    document.getElementById("pieces_inner")!.innerHTML = drawFocusStepped(STATE.focus_stepped) +
-        drawFocusSrc(STATE.focus_src) +
-        drawFocusPlannedDest(STATE.focus_planned_dest) +
-        drawPiecesOnBoard(STATE.board, STATE.focus);
+    document.getElementById("pieces_inner")!.innerHTML = drawFocusStepped(STATE.focus.stepped) +
+        drawFocusSrc(STATE.focus.src) +
+        drawFocusPlannedDest(STATE.focus.planned_dest) +
+        drawPiecesOnBoard(STATE.board, STATE.focus.actual_dest);
 }
 
 function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {

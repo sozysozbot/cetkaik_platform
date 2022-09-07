@@ -26,10 +26,12 @@ export type State = {
 	season: HanziSeason,
 	turn: number,
 	rate: Rate,
-	focus: AbsoluteCoord | null,
-	focus_stepped: AbsoluteCoord | null,
-	focus_src: AbsoluteCoord | null, 
-	focus_planned_dest: AbsoluteCoord | null,
+	focus: {
+		actual_dest: AbsoluteCoord | null,
+		stepped: AbsoluteCoord | null,
+		src: AbsoluteCoord | null,
+		planned_dest: AbsoluteCoord | null
+	},
 	board: Board,
 	ia_side: {
 		player_name_short: string,
