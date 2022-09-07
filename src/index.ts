@@ -89,12 +89,14 @@ function getInitialState(o: {
         ia_side: {
             player_name_short: o.ia_side.player_name_short,
             hop1zuo1: [],
-            player_name: o.ia_side.player_name
+            player_name: o.ia_side.player_name,
+            score: 20,
         },
         a_side: {
             player_name_short: o.a_side.player_name_short,
             player_name: o.a_side.player_name,
-            hop1zuo1: []
+            hop1zuo1: [],
+            score: 20,
         },
     }
 }
@@ -186,12 +188,14 @@ function getNthState(n: number): State {
         ia_side: {
             player_name_short: "筆",
             hop1zuo1: [{ color: "黒", prof: "馬", is_aside: false }],
-            player_name: "筆墨風"
+            player_name: "筆墨風",
+            score: 28,
         },
         a_side: {
             player_name_short: "星",
             player_name: "星享青",
-            hop1zuo1: [{ color: "赤", prof: "兵", is_aside: true }, { color: "赤", prof: "虎", is_aside: true }]
+            hop1zuo1: [{ color: "赤", prof: "兵", is_aside: true }, { color: "赤", prof: "虎", is_aside: true }],
+            score: 12,
         },
 
     };

@@ -113,6 +113,8 @@ export function drawGameState(STATE: State) {
     document.getElementById("ia_side_player_name_text")!.innerHTML = STATE.ia_side.player_name;
     document.getElementById("a_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.a_side.hop1zuo1);
     document.getElementById("ia_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.ia_side.hop1zuo1);
+    document.getElementById("a_side_current_score")!.innerHTML = STATE.a_side.score + "";
+    document.getElementById("ia_side_current_score")!.innerHTML = STATE.ia_side.score + "";
     drawPiecesOnBoard(STATE.board, STATE.focus);
 }
 

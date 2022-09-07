@@ -21,12 +21,14 @@ export type State = {
 	ia_side: {
 		player_name_short: string,
 		hop1zuo1: NonTamPiece[],
-		player_name: string
+		player_name: string,
+		score: number,
 	},
 	a_side: {
 		player_name_short: string,
 		player_name: string,
-		hop1zuo1: NonTamPiece[]
+		hop1zuo1: NonTamPiece[],
+		score: number,
 	}
 }
 
