@@ -1,5 +1,78 @@
 import { BodyElement, Parsed } from "cerke_online_kiaak_parser";
-import { State } from "./types";
+import { Board, NonTamPiece, State } from "./types";
+import { AbsoluteCoord } from "cerke_online_api";
+
+function getInitialBoard(): Board {
+	return {
+		K: {
+			A: { color: "黒", prof: "筆", is_aside: true },
+			E: { color: "赤", prof: "巫", is_aside: true },
+			I: { color: "黒", prof: "兵", is_aside: true },
+			AI: { color: "黒", prof: "兵", is_aside: false },
+			AU: { color: "黒", prof: "巫", is_aside: false },
+			IA: { color: "赤", prof: "筆", is_aside: false },
+		},
+		L: {
+			A: { color: "黒", prof: "馬", is_aside: true },
+			E: { color: "赤", prof: "弓", is_aside: true },
+			I: { color: "赤", prof: "兵", is_aside: true },
+			AI: { color: "赤", prof: "兵", is_aside: false },
+			AU: { color: "黒", prof: "弓", is_aside: false },
+			IA: { color: "赤", prof: "馬", is_aside: false },
+		},
+		N: {
+			A: { color: "黒", prof: "車", is_aside: true },
+			I: { color: "黒", prof: "兵", is_aside: true },
+			AI: { color: "黒", prof: "兵", is_aside: false },
+			IA: { color: "赤", prof: "車", is_aside: false },
+		},
+		T: {
+			A: { color: "黒", prof: "将", is_aside: true },
+			E: { color: "赤", prof: "虎", is_aside: true },
+			I: { color: "赤", prof: "兵", is_aside: true },
+			AI: { color: "赤", prof: "兵", is_aside: false },
+			AU: { color: "黒", prof: "虎", is_aside: false },
+			IA: { color: "赤", prof: "将", is_aside: false },
+		},
+		Z: {
+			A: { color: "赤", prof: "王", is_aside: true },
+			I: { color: "赤", prof: "船", is_aside: true },
+			O: "皇",
+			AI: { color: "黒", prof: "船", is_aside: false },
+			IA: { color: "黒", prof: "王", is_aside: false },
+		},
+		X: {
+			A: { color: "赤", prof: "将", is_aside: true },
+			E: { color: "黒", prof: "虎", is_aside: true },
+			I: { color: "赤", prof: "兵", is_aside: true },
+			AI: { color: "赤", prof: "兵", is_aside: false },
+			AU: { color: "赤", prof: "虎", is_aside: false },
+			IA: { color: "黒", prof: "将", is_aside: false },
+		},
+		C: {
+			A: { color: "赤", prof: "車", is_aside: true },
+			I: { color: "黒", prof: "兵", is_aside: true },
+			AI: { color: "黒", prof: "兵", is_aside: false },
+			IA: { color: "黒", prof: "車", is_aside: false },
+		},
+		M: {
+			A: { color: "赤", prof: "馬", is_aside: true },
+			E: { color: "黒", prof: "弓", is_aside: true },
+			I: { color: "赤", prof: "兵", is_aside: true },
+			AI: { color: "赤", prof: "兵", is_aside: false },
+			AU: { color: "赤", prof: "弓", is_aside: false },
+			IA: { color: "黒", prof: "馬", is_aside: false },
+		},
+		P: {
+			A: { color: "赤", prof: "筆", is_aside: true },
+			E: { color: "黒", prof: "巫", is_aside: true },
+			I: { color: "黒", prof: "兵", is_aside: true },
+			AI: { color: "黒", prof: "兵", is_aside: false },
+			AU: { color: "赤", prof: "巫", is_aside: false },
+			IA: { color: "黒", prof: "筆", is_aside: false },
+		}
+	}
+}
 
 function getInitialState(o: {
 	ia_side: {
@@ -16,92 +89,67 @@ function getInitialState(o: {
 		turn: 0,
 		rate: 1,
 		focus: null,
-		board: {
-			K: {
-				A: { color: "黒", prof: "筆", is_aside: true },
-				E: { color: "赤", prof: "巫", is_aside: true },
-				I: { color: "黒", prof: "兵", is_aside: true },
-				AI: { color: "黒", prof: "兵", is_aside: false },
-				AU: { color: "黒", prof: "巫", is_aside: false },
-				IA: { color: "赤", prof: "筆", is_aside: false },
-			},
-			L: {
-				A: { color: "黒", prof: "馬", is_aside: true },
-				E: { color: "赤", prof: "弓", is_aside: true },
-				I: { color: "赤", prof: "兵", is_aside: true },
-				AI: { color: "赤", prof: "兵", is_aside: false },
-				AU: { color: "黒", prof: "弓", is_aside: false },
-				IA: { color: "赤", prof: "馬", is_aside: false },
-			},
-			N: {
-				A: { color: "黒", prof: "車", is_aside: true },
-				I: { color: "黒", prof: "兵", is_aside: true },
-				AI: { color: "黒", prof: "兵", is_aside: false },
-				IA: { color: "赤", prof: "車", is_aside: false },
-			},
-			T: {
-				A: { color: "黒", prof: "将", is_aside: true },
-				E: { color: "赤", prof: "虎", is_aside: true },
-				I: { color: "赤", prof: "兵", is_aside: true },
-				AI: { color: "赤", prof: "兵", is_aside: false },
-				AU: { color: "黒", prof: "虎", is_aside: false },
-				IA: { color: "赤", prof: "将", is_aside: false },
-			},
-			Z: {
-				A: { color: "赤", prof: "王", is_aside: true },
-				I: { color: "赤", prof: "船", is_aside: true },
-				O: "皇",
-				AI: { color: "黒", prof: "船", is_aside: false },
-				IA: { color: "黒", prof: "王", is_aside: false },
-			},
-			X: {
-				A: { color: "赤", prof: "将", is_aside: true },
-				E: { color: "黒", prof: "虎", is_aside: true },
-				I: { color: "赤", prof: "兵", is_aside: true },
-				AI: { color: "赤", prof: "兵", is_aside: false },
-				AU: { color: "赤", prof: "虎", is_aside: false },
-				IA: { color: "黒", prof: "将", is_aside: false },
-			},
-			C: {
-				A: { color: "赤", prof: "車", is_aside: true },
-				I: { color: "黒", prof: "兵", is_aside: true },
-				AI: { color: "黒", prof: "兵", is_aside: false },
-				IA: { color: "黒", prof: "車", is_aside: false },
-			},
-			M: {
-				A: { color: "赤", prof: "馬", is_aside: true },
-				E: { color: "黒", prof: "弓", is_aside: true },
-				I: { color: "赤", prof: "兵", is_aside: true },
-				AI: { color: "赤", prof: "兵", is_aside: false },
-				AU: { color: "赤", prof: "弓", is_aside: false },
-				IA: { color: "黒", prof: "馬", is_aside: false },
-			},
-			P: {
-				A: { color: "赤", prof: "筆", is_aside: true },
-				E: { color: "黒", prof: "巫", is_aside: true },
-				I: { color: "黒", prof: "兵", is_aside: true },
-				AI: { color: "黒", prof: "兵", is_aside: false },
-				AU: { color: "赤", prof: "巫", is_aside: false },
-				IA: { color: "黒", prof: "筆", is_aside: false },
-			}
-		},
+		focus_stepped: null,
+		focus_src: null,
+		board: getInitialBoard(),
 		ia_side: {
 			player_name_short: o.ia_side.player_name_short,
 			hop1zuo1: [],
 			player_name: o.ia_side.player_name,
 			score: 20,
+			is_newly_acquired: false,
 		},
 		a_side: {
 			player_name_short: o.a_side.player_name_short,
 			player_name: o.a_side.player_name,
 			hop1zuo1: [],
 			score: 20,
+			is_newly_acquired: false,
 		},
+	}
+}
+
+function remove_from(state: State, coord: AbsoluteCoord): NonTamPiece | "皇" {
+	const piece = state.board[coord[1]][coord[0]];
+	if (!piece) { throw new Error(`エラー: 座標${coord[1]}${coord[0]}には駒がありません`); }
+	delete state.board[coord[1]][coord[0]];
+	return piece;
+}
+
+function set_to(state: State, coord: AbsoluteCoord, piece: NonTamPiece | "皇"): NonTamPiece | undefined {
+	if (state.board[coord[1]][coord[0]]) {
+		const captured_piece = state.board[coord[1]][coord[0]];
+		if (captured_piece === "皇") {
+			throw new Error(`エラー: 座標${coord[1]}${coord[0]}には皇が既にあります`);
+		}
+		state.board[coord[1]][coord[0]] = piece;
+		return captured_piece;
+	} else {
+		state.board[coord[1]][coord[0]] = piece;
+		return undefined;
+	}
+}
+
+function set_hop1zuo1(state: State, piece: NonTamPiece) {
+	if (piece.is_aside) {
+		state.ia_side.hop1zuo1.push({ color: piece.color, prof: piece.prof, is_aside: false });
+		state.ia_side.is_newly_acquired = true;
+	} else {
+		state.a_side.hop1zuo1.push({ color: piece.color, prof: piece.prof, is_aside: true });
+		state.a_side.is_newly_acquired = true;
 	}
 }
 
 export function getNextState(current_state: Readonly<State>, body_element: BodyElement): State | null {
 	const new_state: State = JSON.parse(JSON.stringify(current_state));
+
+	// clear the flags
+	new_state.ia_side.is_newly_acquired = false;
+	new_state.a_side.is_newly_acquired = false;
+	new_state.focus_src = null;
+	new_state.focus = null;
+	new_state.focus_stepped = null;
+
 	if (body_element.type === "season_ends") {
 		if (current_state.season === "冬") {
 			return null;
@@ -113,18 +161,73 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 						(() => { throw new Error() })();
 		new_state.turn = 0;
 		return new_state;
+	} else if (body_element.type === "normal_move") {
+		if (body_element.movement.type === "NonTamMove") {
+			if (body_element.movement.data.type === "SrcDst") {
+				// TODO: body_element.ciurl_and_capture
+				const piece = remove_from(new_state, body_element.movement.data.src);
+				const maybe_captured_piece = set_to(new_state, body_element.movement.data.dest, piece);
+				if (maybe_captured_piece) {
+					set_hop1zuo1(new_state, maybe_captured_piece)
+				}
+				new_state.focus = body_element.movement.data.dest;
+				new_state.focus_stepped = null;
+				new_state.focus_src = body_element.movement.data.src;
+				new_state.turn++;
+			} else if (body_element.movement.data.type === "SrcStepDstFinite") {
+				// TODO: body_element.ciurl_and_capture
+				const piece = remove_from(new_state, body_element.movement.data.src);
+				const maybe_captured_piece = set_to(new_state, body_element.movement.data.dest, piece);
+				if (maybe_captured_piece) {
+					set_hop1zuo1(new_state, maybe_captured_piece)
+				}
+				new_state.focus = body_element.movement.data.dest;
+				new_state.focus_stepped = body_element.movement.data.step;
+				new_state.focus_src = body_element.movement.data.src;
+				new_state.turn++;
+			} else if (body_element.movement.data.type === "FromHand") {
+
+			}
+			else {
+				const _: never = body_element.movement.data;
+				throw new Error(`Should not reach here: invalid value in body_element.movement.data.type`);
+			}
+		} else if (body_element.movement.type === "TamMove") {
+
+		} else {
+			const _: never = body_element.movement;
+			throw new Error(`Should not reach here: invalid value in body_element.movement.type`);
+		}
+	} else if (body_element.type === "end_season") {
+
+	} else if (body_element.type === "game_set") {
+
+	} else if (body_element.type === "taxot") {
+
+	} else if (body_element.type === "tymok") {
+
+	} else {
+		const _: never = body_element;
+		throw new Error("Should not reach here: invalid value in body_element.type");
 	}
 	return new_state;
 }
 
 export function getAllStatesFromParsed(parsed: Readonly<Parsed>): State[] {
-	const ans: State[] = [];
 	let current_state = getInitialState({
 		ia_side: { player_name_short: "張", player_name: "張三" },
 		a_side: { player_name_short: "李", player_name: "李四" }
 	});
+	const ans: State[] = [current_state];
 	for (let i = 0; i < parsed.parsed_bodies.length; i++) {
-		const next_state = getNextState(current_state, parsed.parsed_bodies[i]);
+		const next_state = (() => {
+			try {
+				return getNextState(current_state, parsed.parsed_bodies[i])
+			} catch (e: any) {
+				console.log(`${i}ステップ目での${e}`);
+				return current_state;
+			}
+		})();
 		if (!next_state) break;
 		ans.push(next_state);
 		current_state = next_state;

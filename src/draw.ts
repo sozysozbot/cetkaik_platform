@@ -1,9 +1,10 @@
-import { AbsoluteColumn, AbsoluteRow } from "cerke_online_api";
+import { AbsoluteColumn, AbsoluteRow, AbsoluteCoord } from "cerke_online_api";
 import { NonTamPiece, State, HanziProfessionAndTam, profs, Board } from "./types";
 
 export const height = 387;
 export const left_margin = 40;
 export const top_margin = 40;
+export const cell_size = 43;
 
 export function drawEmptyBoard() {
     const ctx = (document.getElementById("cv")! as HTMLCanvasElement).getContext("2d")!;
@@ -49,13 +50,13 @@ export function drawEmptyBoard() {
     const columns = ["A", "E", "I", "U", "O", "Y", "AI", "AU", "IA"];
     ctx.textAlign = "left";
     for (let i = 0; i < 9; i++) {
-        ctx.fillText(columns[i], left_margin + height + 10, top_margin + 30 + 43 * i);
+        ctx.fillText(columns[i], left_margin + height + 10, top_margin + 30 + cell_size * i);
     }
 
     const rows = ["K", "L", "N", "T", "Z", "X", "C", "M", "P"];
     ctx.textAlign = "center"
     for (let i = 0; i < 9; i++) {
-        ctx.fillText(rows[i], left_margin + 20 + 43 * i, top_margin - 10);
+        ctx.fillText(rows[i], left_margin + 20 + cell_size * i, top_margin - 10);
     }
 
     ctx.save();
@@ -64,23 +65,76 @@ export function drawEmptyBoard() {
 
     ctx.textAlign = "left";
     for (let i = 0; i < 9; i++) {
-        ctx.fillText(columns[i], -left_margin + 10, -(top_margin + 15 + 43 * i));
+        ctx.fillText(columns[i], -left_margin + 10, -(top_margin + 15 + cell_size * i));
     }
 
     ctx.textAlign = "center"
     for (let i = 0; i < 9; i++) {
-        ctx.fillText(rows[i], -(left_margin + 20 + 43 * i), -(top_margin + height + 10));
+        ctx.fillText(rows[i], -(left_margin + 20 + cell_size * i), -(top_margin + height + 10));
     }
 
     ctx.restore();
-
 }
 
-export function drawPiecesOnBoard(board: Board, focus: [AbsoluteColumn, AbsoluteRow] | null) {
+function get_top_left(coord: AbsoluteCoord) {
+    const column = {
+        K: 0,
+        L: 1,
+        N: 2,
+        T: 3,
+        Z: 4,
+        X: 5,
+        C: 6,
+        M: 7,
+        P: 8
+    }[coord[1]];
+    const row = {
+        IA: 8,
+        AU: 7,
+        AI: 6, Y: 5, O: 4, U: 3, I: 2, E: 1, A: 0
+    }[coord[0]];
+    const left = left_margin + cell_size * (column - 0.5);
+    const top = top_margin + cell_size * (row - 0.5);
+    return { left, top }
+}
+
+export function drawFocusStepped(focus_stepped: AbsoluteCoord | null) {
+    if (!focus_stepped) return;
+    const circle_radius = 18;
+    const { top, left } = get_top_left(focus_stepped);
+    document.getElementById("pieces_inner")!.innerHTML += `
+    <div style="
+        position: absolute; 
+        left: ${left + cell_size - circle_radius}px;
+        top: ${top + cell_size - circle_radius}px;
+        width: ${circle_radius * 2}px; 
+        height: ${circle_radius * 2}px; 
+        border-radius: 50%; 
+        background-color: rgba(255, 255, 0, 0.3)
+    "></div>`;
+}
+
+export function drawFocusSrc(focus_src: AbsoluteCoord | null) {
+    if (!focus_src) return;
+    const circle_radius = 18;
+    const { top, left } = get_top_left(focus_src);
+    document.getElementById("pieces_inner")!.innerHTML += `
+    <div style="
+        position: absolute; 
+        left: ${left + cell_size - circle_radius}px;
+        top: ${top + cell_size - circle_radius}px;
+        width: ${circle_radius * 2}px; 
+        height: ${circle_radius * 2}px; 
+        border-radius: 50%; 
+        background-color: rgba(0, 0, 0, 0.3)
+    "></div>`;
+}
+
+export function drawPiecesOnBoard(board: Board, focus: AbsoluteCoord | null) {
     let ans = "";
     for (const clm in board) {
         for (const rw in board[clm as AbsoluteColumn]) {
-            const is_focused = focus ? focus[0] == clm && focus[1] == rw : false;
+            const is_focused = focus ? focus[1] === clm && focus[0] === rw : false;
             ans += positionPieceOnBoard(
                 clm as AbsoluteColumn,
                 rw as AbsoluteRow,
@@ -94,11 +148,30 @@ export function drawPiecesOnBoard(board: Board, focus: [AbsoluteColumn, Absolute
 }
 
 
-function getHop1Zuo1HTML(pieces: NonTamPiece[]) {
+function getHop1Zuo1HTML(pieces: NonTamPiece[], is_newly_acquired: boolean) {
     let ans = "";
     for (let i = 0; i < pieces.length; i++) {
         const { color, prof } = pieces[i];
-        ans += `<li><div style="width: 23px; height: 43px; transform: scale(0.26); transform-origin: top left">${renderNormalPiece(color, prof, false)}</div></li>`;
+        const rad = 18 / 0.26;
+        ans += `<li>
+            <div style="
+                width: 23px; 
+                height: ${cell_size}px; 
+                transform: scale(0.26); 
+                transform-origin: top left; 
+            ">
+                ${renderNormalPiece(color, prof, false)}
+                ${is_newly_acquired && i == pieces.length - 1 ? `<div style="
+                    position: absolute;
+                    left: ${42 - rad}px;
+                    top: ${42 - rad}px;
+                    width: ${rad * 2}px;
+                    height: ${rad * 2}px;
+                    border-radius: 50%;
+                    background-color: rgba(0, 60, 60, 0.3);
+                "></div>` : ""}
+            </div>
+        </li>`;
     }
     return ans;
 }
@@ -111,11 +184,13 @@ export function drawGameState(STATE: State) {
     document.getElementById("a_side_player_name_short_text")!.innerHTML = STATE.a_side.player_name_short;
     document.getElementById("a_side_player_name_text")!.innerHTML = STATE.a_side.player_name;
     document.getElementById("ia_side_player_name_text")!.innerHTML = STATE.ia_side.player_name;
-    document.getElementById("a_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.a_side.hop1zuo1);
-    document.getElementById("ia_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.ia_side.hop1zuo1);
+    document.getElementById("a_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.a_side.hop1zuo1, STATE.a_side.is_newly_acquired);
+    document.getElementById("ia_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.ia_side.hop1zuo1, STATE.ia_side.is_newly_acquired);
     document.getElementById("a_side_current_score")!.innerHTML = STATE.a_side.score + "";
     document.getElementById("ia_side_current_score")!.innerHTML = STATE.ia_side.score + "";
     drawPiecesOnBoard(STATE.board, STATE.focus);
+    drawFocusStepped(STATE.focus_stepped);
+    drawFocusSrc(STATE.focus_src);
 }
 
 function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {
@@ -132,24 +207,7 @@ function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is
 
 
 function positionPieceOnBoard(clm: AbsoluteColumn, rw: AbsoluteRow, piece: NonTamPiece | "皇", is_bold: boolean) {
-    const column = {
-        K: 0,
-        L: 1,
-        N: 2,
-        T: 3,
-        Z: 4,
-        X: 5,
-        C: 6,
-        M: 7,
-        P: 8
-    }[clm];
-    const row = {
-        IA: 8,
-        AU: 7,
-        AI: 6, Y: 5, O: 4, U: 3, I: 2, E: 1, A: 0
-    }[rw];
-    const left = left_margin + 43 * (column - 0.5);
-    const top = top_margin + 43 * (row - 0.5);
+    const { left, top } = get_top_left([rw, clm]);
     if (piece === "皇") {
         return `
         <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${"rotate(90deg)"}">
