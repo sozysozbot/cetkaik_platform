@@ -73,6 +73,8 @@ function init() {
 
 }
 
+
+
 function depict_board(board: { [key in AbsoluteColumn]?: { [key in AbsoluteRow]?: [ColorAndProf, boolean] | "皇" } }, focus: [AbsoluteColumn, AbsoluteRow]) {
     let ans = "";
     for (const clm in board) {
@@ -184,6 +186,7 @@ function foooo(clm: AbsoluteColumn, rw: AbsoluteRow, color_and_prof_and_rotated:
 }
 
 window.addEventListener('load', () => {
+    init();
     depict_state({
         season: "秋",
         turn: 29,
