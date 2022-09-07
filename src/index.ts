@@ -1,3 +1,5 @@
+import { BodyElement } from 'cerke_online_kiaak_parser';
+
 const height = 387;
 const left_margin = 40;
 const top_margin = 40;
@@ -100,11 +102,14 @@ function depict_hop1zuo1(pieces: ColorAndProf[]) {
     return ans
 }
 
+type HanziSeason = "春" | "夏" | "秋" | "冬";
+type Rate = 1 | 2 | 4 | 8 | 16 | 32 | 64;
+
 type State = {
-    season: "秋",
-    turn: 29,
-    rate: 4,
-    focus: ["P", "O"],
+    season: HanziSeason,
+    turn: number,
+    rate: Rate,
+    focus: [AbsoluteColumn, AbsoluteRow],
     board: { [key in AbsoluteColumn]?: { [key in AbsoluteRow]?: [ColorAndProf, boolean] | "皇" } },
     ia_side: {
         player_name_short: string,
@@ -185,11 +190,10 @@ function foooo(clm: AbsoluteColumn, rw: AbsoluteRow, color_and_prof_and_rotated:
 
 }
 
-window.addEventListener('load', () => {
-    init();
-    depict_state({
+function nthState(n: number): State {
+    return {
         season: "秋",
-        turn: 29,
+        turn: n,
         rate: 4,
         focus: ["P", "O"],
         board: {
@@ -269,5 +273,18 @@ window.addEventListener('load', () => {
             hop1zuo1: [{ color: "赤", prof: "兵" }, { color: "赤", prof: "虎" }]
         },
 
-    });
+    };
+
+}
+
+window.addEventListener('load', () => {
+    init();
+    const turn_slider = document.getElementById("turn_slider")! as HTMLInputElement;
+    turn_slider.min = "1";
+    turn_slider.max = "45";
+    turn_slider.value = "29";
+    depict_state(nthState(29));
+    turn_slider.onchange = () => {
+        depict_state(nthState(Number(turn_slider.value)));
+    }
 });

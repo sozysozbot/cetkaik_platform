@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var height = 387;
 var left_margin = 40;
 var top_margin = 40;
@@ -72,7 +73,7 @@ function depict_hop1zuo1(pieces) {
     var ans = "";
     for (var i = 0; i < pieces.length; i++) {
         var _a = pieces[i], color = _a.color, prof = _a.prof;
-        ans += "<li><div style=\"width: 23px; height: 43px; transform: scale(0.26); transform-origin: top left\">" + renderNormalPiece(color, prof, false) + "</div></li>";
+        ans += "<li><div style=\"width: 23px; height: 43px; transform: scale(0.26); transform-origin: top left\">".concat(renderNormalPiece(color, prof, false), "</div></li>");
     }
     return ans;
 }
@@ -95,7 +96,7 @@ function renderNormalPiece(color, prof, is_bold) {
         "黒": "ゴシック駒",
         "赤": "ゴシック駒_赤",
     }[color];
-    return "<div\n    style=\"width: 87px; height: 87px; background-position-x: " + x + "px; background-position-y: " + y + "px; background-image: url(" + color_path + ".svg); \">\n</div>";
+    return "<div\n    style=\"width: 87px; height: 87px; background-position-x: ".concat(x, "px; background-position-y: ").concat(y, "px; background-image: url(").concat(color_path, ".svg); \">\n</div>");
 }
 function foooo(clm, rw, color_and_prof_and_rotated, is_bold) {
     var column = {
@@ -117,17 +118,17 @@ function foooo(clm, rw, color_and_prof_and_rotated, is_bold) {
     var left = left_margin + 43 * (column - 0.5);
     var top = top_margin + 43 * (row - 0.5);
     if (color_and_prof_and_rotated === "皇") {
-        return "\n        <div style=\"position: absolute; left: " + left + "px; top: " + top + "px; transform: scale(0.26) " + "rotate(90deg)" + "\">\n            " + renderNormalPiece("黒", "皇", is_bold) + "\n        </div>";
+        return "\n        <div style=\"position: absolute; left: ".concat(left, "px; top: ").concat(top, "px; transform: scale(0.26) ").concat("rotate(90deg)", "\">\n            ").concat(renderNormalPiece("黒", "皇", is_bold), "\n        </div>");
     }
     else {
         var _a = color_and_prof_and_rotated[0], color = _a.color, prof = _a.prof, rotated = color_and_prof_and_rotated[1];
-        return "\n        <div style=\"position: absolute; left: " + left + "px; top: " + top + "px; transform: scale(0.26) " + (rotated ? "rotate(180deg)" : "") + "\">\n            " + renderNormalPiece(color, prof, is_bold) + "\n        </div>";
+        return "\n        <div style=\"position: absolute; left: ".concat(left, "px; top: ").concat(top, "px; transform: scale(0.26) ").concat(rotated ? "rotate(180deg)" : "", "\">\n            ").concat(renderNormalPiece(color, prof, is_bold), "\n        </div>");
     }
 }
-window.addEventListener('load', function () {
-    depict_state({
+function nthState(n) {
+    return {
         season: "秋",
-        turn: 29,
+        turn: n,
         rate: 4,
         focus: ["P", "O"],
         board: {
@@ -206,5 +207,17 @@ window.addEventListener('load', function () {
             player_name: "星享青",
             hop1zuo1: [{ color: "赤", prof: "兵" }, { color: "赤", prof: "虎" }]
         },
-    });
+    };
+}
+window.addEventListener('load', function () {
+    init();
+    var turn_slider = document.getElementById("turn_slider");
+    turn_slider.min = "1";
+    turn_slider.max = "45";
+    turn_slider.value = "29";
+    depict_state(nthState(29));
+    turn_slider.onchange = function () {
+        depict_state(nthState(Number(turn_slider.value)));
+    };
 });
+//# sourceMappingURL=index.js.map
