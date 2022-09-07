@@ -60,10 +60,39 @@ TY虎NOLU無撃裁手赤兵
     drawEmptyBoard();
     const turn_slider = document.getElementById("turn_slider")! as HTMLInputElement;
     turn_slider.min = "0";
-    turn_slider.max = `${states.length - 1}`;
+    const max = states.length - 1;
+    turn_slider.max = `${max}`;
     turn_slider.value = "0";
     drawGameState(states[0]);
-    turn_slider.oninput = () => {
+    turn_slider.oninput = turn_slider.onchange = () => {
         drawGameState(states[Number(turn_slider.value)]);
+    }
+
+    const button_next = document.getElementById("button_next")! as HTMLButtonElement;
+    button_next.onclick = () => {
+        turn_slider.value = `${Number(turn_slider.value) + 1}`;
+        const new_value = Number(turn_slider.value); // automatically crops the value appropriately
+        drawGameState(states[new_value]);
+    }
+
+    const button_previous = document.getElementById("button_previous")! as HTMLButtonElement;
+    button_previous.onclick = () => {
+        turn_slider.value = `${Number(turn_slider.value) - 1}`;
+        const new_value = Number(turn_slider.value); // automatically crops the value appropriately
+        drawGameState(states[new_value]);
+    }
+
+    const button_first = document.getElementById("button_first")! as HTMLButtonElement;
+    button_first.onclick = () => {
+        const new_value = 0;
+        turn_slider.value = `${new_value}`;
+        drawGameState(states[new_value]);
+    }
+
+    const button_last = document.getElementById("button_last")! as HTMLButtonElement;
+    button_last.onclick = () => {
+        const new_value = max;
+        turn_slider.value = `${new_value}`;
+        drawGameState(states[new_value]);
     }
 });
