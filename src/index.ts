@@ -1,208 +1,58 @@
 import { BodyElement } from 'cerke_online_kiaak_parser';
 import { drawEmptyBoard, drawGameState } from './draw';
-import { State } from './types';
-
-function getInitialState(o: {
-    ia_side: {
-        player_name_short: string,
-        player_name: string
-    },
-    a_side: {
-        player_name_short: string,
-        player_name: string,
-    },
-}): State {
-    return {
-        season: "春",
-        turn: 1,
-        rate: 1,
-        focus: null,
-        board: {
-            K: {
-                A: { color: "黒", prof: "筆", is_aside: true },
-                E: { color: "赤", prof: "巫", is_aside: true },
-                I: { color: "黒", prof: "兵", is_aside: true },
-                AI: { color: "黒", prof: "兵", is_aside: false },
-                AU: { color: "黒", prof: "巫", is_aside: false },
-                IA: { color: "赤", prof: "筆", is_aside: false },
-            },
-            L: {
-                A: { color: "黒", prof: "馬", is_aside: true },
-                E: { color: "赤", prof: "弓", is_aside: true },
-                I: { color: "赤", prof: "兵", is_aside: true },
-                AI: { color: "赤", prof: "兵", is_aside: false },
-                AU: { color: "黒", prof: "弓", is_aside: false },
-                IA: { color: "赤", prof: "馬", is_aside: false },
-            },
-            N: {
-                A: { color: "黒", prof: "車", is_aside: true },
-                I: { color: "黒", prof: "兵", is_aside: true },
-                AI: { color: "黒", prof: "兵", is_aside: false },
-                IA: { color: "赤", prof: "車", is_aside: false },
-            },
-            T: {
-                A: { color: "黒", prof: "将", is_aside: true },
-                E: { color: "赤", prof: "虎", is_aside: true },
-                I: { color: "赤", prof: "兵", is_aside: true },
-                AI: { color: "赤", prof: "兵", is_aside: false },
-                AU: { color: "黒", prof: "虎", is_aside: false },
-                IA: { color: "赤", prof: "将", is_aside: false },
-            },
-            Z: {
-                A: { color: "赤", prof: "王", is_aside: true },
-                I: { color: "赤", prof: "船", is_aside: true },
-                O: "皇",
-                AI: { color: "黒", prof: "船", is_aside: false },
-                IA: { color: "黒", prof: "王", is_aside: false },
-            },
-            X: {
-                A: { color: "赤", prof: "将", is_aside: true },
-                E: { color: "黒", prof: "虎", is_aside: true },
-                I: { color: "赤", prof: "兵", is_aside: true },
-                AI: { color: "赤", prof: "兵", is_aside: false },
-                AU: { color: "赤", prof: "虎", is_aside: false },
-                IA: { color: "黒", prof: "将", is_aside: false },
-            },
-            C: {
-                A: { color: "赤", prof: "車", is_aside: true },
-                I: { color: "黒", prof: "兵", is_aside: true },
-                AI: { color: "黒", prof: "兵", is_aside: false },
-                IA: { color: "黒", prof: "車", is_aside: false },
-            },
-            M: {
-                A: { color: "赤", prof: "馬", is_aside: true },
-                E: { color: "黒", prof: "弓", is_aside: true },
-                I: { color: "赤", prof: "兵", is_aside: true },
-                AI: { color: "赤", prof: "兵", is_aside: false },
-                AU: { color: "赤", prof: "弓", is_aside: false },
-                IA: { color: "黒", prof: "馬", is_aside: false },
-            },
-            P: {
-                A: { color: "赤", prof: "筆", is_aside: true },
-                E: { color: "黒", prof: "巫", is_aside: true },
-                I: { color: "黒", prof: "兵", is_aside: true },
-                AI: { color: "黒", prof: "兵", is_aside: false },
-                AU: { color: "赤", prof: "巫", is_aside: false },
-                IA: { color: "黒", prof: "筆", is_aside: false },
-            }
-        },
-        ia_side: {
-            player_name_short: o.ia_side.player_name_short,
-            hop1zuo1: [],
-            player_name: o.ia_side.player_name,
-            score: 20,
-        },
-        a_side: {
-            player_name_short: o.a_side.player_name_short,
-            player_name: o.a_side.player_name,
-            hop1zuo1: [],
-            score: 20,
-        },
-    }
-}
-
-function getNthState(n: number): State {
-    if (n == 1) {
-        return getInitialState({
-            ia_side: {
-                player_name_short: "筆",
-                player_name: "筆墨風"
-            },
-            a_side: {
-                player_name_short: "星",
-                player_name: "星享青",
-            }
-        })
-    }
-    return {
-        season: "秋",
-        turn: n,
-        rate: 4,
-        focus: ["P", "O"],
-        board: {
-            C: {
-                AI: { color: "黒", prof: "車", is_aside: false },
-                E: { color: "赤", prof: "将", is_aside: true },
-                I: { color: "赤", prof: "車", is_aside: true },
-                U: { color: "黒", prof: "兵", is_aside: true },
-                Y: { color: "黒", prof: "兵", is_aside: false },
-            },
-            K: {
-                A: { color: "黒", prof: "筆", is_aside: true },
-                AI: { color: "黒", prof: "兵", is_aside: false },
-                AU: { color: "黒", prof: "巫", is_aside: false },
-                E: { color: "赤", prof: "巫", is_aside: true },
-                IA: { color: "赤", prof: "筆", is_aside: false },
-                U: { color: "黒", prof: "兵", is_aside: true }
-            },
-            L: {
-                AI: { color: "赤", prof: "兵", is_aside: false },
-                AU: { color: "黒", prof: "弓", is_aside: false },
-                E: { color: "赤", prof: "弓", is_aside: true },
-                IA: { color: "赤", prof: "馬", is_aside: false },
-                U: { color: "赤", prof: "兵", is_aside: true }
-            },
-            M: {
-                A: { color: "赤", prof: "馬", is_aside: true },
-                AU: { color: "赤", prof: "弓", is_aside: false },
-                I: { color: "赤", prof: "兵", is_aside: true },
-                IA: { color: "黒", prof: "馬", is_aside: false },
-                O: { color: "赤", prof: "兵", is_aside: false }
-            },
-            N: {
-                AI: { color: "赤", prof: "将", is_aside: false },
-                AU: { color: "赤", prof: "車", is_aside: false },
-                I: { color: "黒", prof: "兵", is_aside: true },
-                Y: { color: "黒", prof: "兵", is_aside: false }
-            },
-            P: {
-                A: { color: "赤", prof: "筆", is_aside: true },
-                AU: { color: "赤", prof: "巫", is_aside: false },
-                E: { color: "黒", prof: "巫", is_aside: true },
-                I: { color: "黒", prof: "弓", is_aside: true },
-                IA: { color: "黒", prof: "筆", is_aside: false },
-                U: { color: "黒", prof: "兵", is_aside: true },
-                O: { color: "黒", prof: "兵", is_aside: false },
-            },
-            T: {
-                A: { color: "赤", prof: "王", is_aside: true },
-                AI: { color: "赤", prof: "兵", is_aside: false },
-                AU: { color: "黒", prof: "虎", is_aside: false },
-                E: { color: "黒", prof: "車", is_aside: true },
-                I: { color: "赤", prof: "兵", is_aside: true }
-            },
-            X: {
-                AU: { color: "赤", prof: "兵", is_aside: true },
-                E: { color: "黒", prof: "虎", is_aside: true },
-                I: { color: "黒", prof: "将", is_aside: true }
-            },
-            Z: {
-                A: { color: "赤", prof: "虎", is_aside: true },
-                AI: { color: "黒", prof: "船", is_aside: false },
-                IA: { color: "黒", prof: "王", is_aside: false },
-                O: "皇",
-                U: { color: "赤", prof: "船", is_aside: true },
-                Y: { color: "黒", prof: "将", is_aside: false }
-            },
-        },
-        ia_side: {
-            player_name_short: "筆",
-            hop1zuo1: [{ color: "黒", prof: "馬", is_aside: false }],
-            player_name: "筆墨風",
-            score: 28,
-        },
-        a_side: {
-            player_name_short: "星",
-            player_name: "星享青",
-            hop1zuo1: [{ color: "赤", prof: "兵", is_aside: true }, { color: "赤", prof: "虎", is_aside: true }],
-            score: 12,
-        },
-
-    };
-
-}
+import { getNthState } from './state';
 
 window.addEventListener('load', () => {
+    const case1 =
+	`{一位色:黒黒黒}
+{始時:2022-05-31T17:16:02.433Z}
+{終時:2022-05-31T18:13:52.357Z}
+MAU弓MAIMY橋五    PE巫PIPU無撃裁
+CAI兵CAU無撃裁    ME弓CE無撃裁
+PAU巫CAUCAI無撃裁    ZA王ZE無撃裁
+MY弓MIMA橋一此無    CI兵MIMU無撃裁
+CAI巫CAMA橋一手赤馬    PA筆MA無撃裁手赤巫
+LAU弓LAILY橋三    TE虎NITU橋一
+LY弓LILE橋三手赤弓    KA筆KELE無撃裁手黒弓
+MY弓MU無撃裁手黒兵
+
+或為馬弓兵而手五
+終季    春終
+
+MAU弓MAIMY橋三    XE虎ZIXU無撃裁
+XAI兵XY無撃裁    XU虎MY無撃裁手赤弓
+XAU虎CAIMY橋四手黒虎    ME弓MIMU橋三
+KAU巫KAIKY無撃裁    ZO皇[TU]ZIZE
+PAU巫ZAU無撃裁    CI兵CE無撃裁
+ZAI船ZI無撃裁手赤船    TE虎ZI水二此無
+ZE皇TI[NU]LO    XA将ZE無撃裁
+ZI船ZEZA橋四手赤王
+
+或為王加獣而手八
+終季    夏終
+
+MAU弓MAIMY橋二    ME弓MIMU橋三
+CAI兵CAU無撃裁    XE虎ZIXU無撃裁
+MY弓MU無撃裁手黒弓    MI兵MU無撃裁手赤弓
+PAU巫CAUCAI無撃裁    ZA王ZE無撃裁
+CAI巫CAXA橋三手赤将    ZE王XA無撃裁手赤巫
+PIA筆PAIPY橋一    PE巫ZE無撃裁
+PY筆PIPA橋二手赤筆    CA車PA無撃裁手黒筆
+LAU弓LAILY橋一    LE弓LILU橋四
+LY弓LU無撃裁手赤弓    LI兵LU無撃裁手黒弓
+黒弓CY    黒弓CU
+CY弓CU無撃裁手黒弓    CI兵CU無撃裁手黒弓
+黒弓MI    XA王CE無撃裁
+MI弓MA無撃裁手赤馬    CE王MA無撃裁手黒弓
+TAU虎ZAITY無撃裁    NI兵NO水三
+TY虎NOLU無撃裁手赤兵
+
+或為同色馬弓兵而手七
+終季    秋終
+
+
+星一周`;
+
     drawEmptyBoard();
     const turn_slider = document.getElementById("turn_slider")! as HTMLInputElement;
     turn_slider.min = "1";
