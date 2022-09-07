@@ -1,6 +1,6 @@
 import { BodyElement, parseCerkeOnlineKia1Ak1, Parsed } from 'cerke_online_kiaak_parser';
 import { drawEmptyBoard, drawGameState } from './draw';
-import { getAllStatesFromParsed, getNthState } from './state';
+import { getAllStatesFromParsed } from './state';
 import { State } from './types';
 
 window.addEventListener('load', () => {
