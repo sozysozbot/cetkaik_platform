@@ -253,3 +253,29 @@ function PositionedPieceOnBoardHTML(clm: AbsoluteColumn, rw: AbsoluteRow, piece:
     }
 
 }
+
+export function highlightNthKia1Ak1(kiar_ark: string, n: number) {
+    const lines = kiar_ark.trim().split("\n");
+    console.log(lines);
+    // when n = 0, nothing should be highlighted
+    for (let i = 3; i < lines.length; i++) {
+        if (lines[i].trim() === "") continue;
+        const elems_length = lines[i].split(/ /g).filter(a => a !== "").length;
+        if (n > elems_length || n <= 0) {
+            n -= elems_length; continue;
+        } else {
+            // n = 1 => highlight the first element, and so on
+            const arr = lines[i].split(/ /g);
+            for (let j = 0; j < arr.length; j++) {
+                if (arr[j] === "") {
+                    continue;
+                } else {
+                    n--;
+                    if (n === 0) { arr[j] = `<span style="background-color: #cccccc;">${arr[j]}</span>`; }
+                }
+            }
+            lines[i] = arr.join(" ");
+        }
+    }
+    document.getElementById("kia_ak")!.innerHTML = lines.join("\n");
+}

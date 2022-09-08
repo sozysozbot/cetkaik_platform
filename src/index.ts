@@ -1,10 +1,10 @@
 import { parseCerkeOnlineKia1Ak1, Parsed } from 'cerke_online_kiaak_parser';
-import { drawEmptyBoard, drawGameState } from './draw';
+import { drawEmptyBoard, drawGameState, highlightNthKia1Ak1 } from './draw';
 import { getAllStatesFromParsed } from './state';
 import { State } from './types';
 
 window.addEventListener('load', () => {
-    const case3 =
+    const kiar_ark =
 	`{一位色:赤赤赤}
 {始時:2022-04-01T17:00:24.278Z}
 {終時:2022-04-01T17:59:40.857Z}
@@ -67,10 +67,10 @@ ZI船ZIA無撃裁手黒王
 
 星一周`;
 
-    const parsed: Parsed = parseCerkeOnlineKia1Ak1(case3);
+    const parsed: Parsed = parseCerkeOnlineKia1Ak1(kiar_ark);
     const states: State[] = getAllStatesFromParsed(parsed);
 
-    document.getElementById("kia_ak")!.textContent = case3;
+    document.getElementById("kia_ak")!.textContent = kiar_ark;
 
     drawEmptyBoard();
     const turn_slider = document.getElementById("turn_slider")! as HTMLInputElement;
@@ -80,7 +80,9 @@ ZI船ZIA無撃裁手黒王
     turn_slider.value = "0";
     drawGameState(states[0]);
     turn_slider.oninput = turn_slider.onchange = () => {
-        drawGameState(states[Number(turn_slider.value)]);
+        const new_value = Number(turn_slider.value);
+        drawGameState(states[new_value]);
+        highlightNthKia1Ak1(kiar_ark, new_value);
     }
 
     const button_next = document.getElementById("button_next")! as HTMLButtonElement;
@@ -88,6 +90,7 @@ ZI船ZIA無撃裁手黒王
         turn_slider.value = `${Number(turn_slider.value) + 1}`;
         const new_value = Number(turn_slider.value); // automatically crops the value appropriately
         drawGameState(states[new_value]);
+        highlightNthKia1Ak1(kiar_ark, new_value);
     }
 
     const button_previous = document.getElementById("button_previous")! as HTMLButtonElement;
@@ -95,6 +98,7 @@ ZI船ZIA無撃裁手黒王
         turn_slider.value = `${Number(turn_slider.value) - 1}`;
         const new_value = Number(turn_slider.value); // automatically crops the value appropriately
         drawGameState(states[new_value]);
+        highlightNthKia1Ak1(kiar_ark, new_value);
     }
 
     const button_first = document.getElementById("button_first")! as HTMLButtonElement;
@@ -102,6 +106,7 @@ ZI船ZIA無撃裁手黒王
         const new_value = 0;
         turn_slider.value = `${new_value}`;
         drawGameState(states[new_value]);
+        highlightNthKia1Ak1(kiar_ark, new_value);
     }
 
     const button_last = document.getElementById("button_last")! as HTMLButtonElement;
@@ -109,5 +114,6 @@ ZI船ZIA無撃裁手黒王
         const new_value = max;
         turn_slider.value = `${new_value}`;
         drawGameState(states[new_value]);
+        highlightNthKia1Ak1(kiar_ark, new_value);
     }
 });
