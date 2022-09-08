@@ -16,71 +16,83 @@
         <div class="modal-background"></div>
         <div class="animation-content">
             <div class="sp_show modal-card is-cetkaik-player-modal-card">
-                <div class="modal-card-body">
-                    <div class="is-size-7 has-text-centered"><span style="visibility: visible;"
-                            class="has_player_name"><span id="ia_side_player_name_text"></span> vs
-                            <span id="a_side_player_name_text"></span></span></div>
-                    <div
-                        class="cetkaik-player theme-simple size-medium bg_variant-a piece_variant-a run_mode-view_mode horizontal">
+                <div class="modal-card-body" style="display: flex;">
+                    <div>
+                        <div class="is-size-7 has-text-centered"><span style="visibility: visible;"
+                                class="has_player_name"><span id="ia_side_player_name_text"></span> vs
+                                <span id="a_side_player_name_text"></span></span></div>
+                        <div
+                            class="cetkaik-player theme-simple size-medium run_mode-view_mode horizontal">
 
-                        <div class="turn_edit_container">
-                            <div class="turn_number_area"><span class="turn_edit_text">
-                                    <span id="season_text"></span>
-                                    <span id="turn_text"></span>日
-                                    <span id="rate_text"></span>層</span>
+                            <div class="turn_edit_container">
+                                <div class="turn_number_area"><span class="turn_edit_text">
+                                        <span id="season_text"></span>
+                                        <span id="turn_text"></span>日
+                                        <span id="rate_text"></span>層</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="board_container font_size_base">
-                            <div class="flippable flip">
-                                <div class="piece_stand_outer flex_item location_a_side production turn_active">
-                                    <div class="current_score_wrap">
-                                        <div class="current_score" id="a_side_current_score">12</div>
-                                    </div>
-                                    <div class="player_name has_player_name"><span
-                                            id="a_side_player_name_short_text"></span></div>
-                                    <ul class="piece_stand" style="margin-top: 20px;" id="a_side_piece_stand"></ul>
-                                </div>
-                                <div style="position: relative; margin: 0 12px" id="pieces">
-                                    <div id="pieces_inner">
-                                    </div>
-                                    <canvas id="cv" width="467" height="467"></canvas>
-                                </div>
-                                <div class="flex_item">
-                                    <div></div>
-                                    <div class="piece_stand_outer location_ia_side production">
-                                        <div class="current_score_wrap">
-                                            <div class="current_score" id="ia_side_current_score">28</div>
+                            <div>
+                                <div class="board_container font_size_base">
+                                    <div class="flippable flip">
+                                        <div class="piece_stand_outer flex_item location_a_side production turn_active">
+                                            <div class="current_score_wrap">
+                                                <div class="current_score" id="a_side_current_score">12</div>
+                                            </div>
+                                            <div class="player_name has_player_name"><span
+                                                    id="a_side_player_name_short_text"></span></div>
+                                            <ul class="piece_stand" style="margin-top: 20px;" id="a_side_piece_stand">
+                                            </ul>
                                         </div>
-                                        <div class="player_name has_player_name"><span
-                                                id="ia_side_player_name_short_text"></span></div>
-                                        <ul class="piece_stand" style="margin-top: 20px;" id="ia_side_piece_stand"></ul>
+                                        <div style="position: relative; margin: 0 12px" id="pieces">
+                                            <div id="pieces_inner">
+                                            </div>
+                                            <canvas id="cv" width="467" height="467"></canvas>
+                                        </div>
+                                        <div class="flex_item">
+                                            <div></div>
+                                            <div class="piece_stand_outer location_ia_side production">
+                                                <div class="current_score_wrap">
+                                                    <div class="current_score" id="ia_side_current_score">28</div>
+                                                </div>
+                                                <div class="player_name has_player_name"><span
+                                                        id="ia_side_player_name_short_text"></span></div>
+                                                <ul class="piece_stand" style="margin-top: 20px;"
+                                                    id="ia_side_piece_stand"></ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="controller_group buttons has-addons is-centered is-paddingless"><button
+                                            class="button first" id="button_first"><span class="icon"><i
+                                                    class="mdi mdi-menu-left mdi-24px"></i></span></button><button
+                                            class="button previous" id="button_previous"><span class="icon is-small"><i
+                                                    class="mdi mdi-chevron-left"></i></span></button><button
+                                            class="button next" id="button_next"><span class="icon is-small"><i
+                                                    class="mdi mdi-chevron-right"></i></span></button><button
+                                            class="button last" id="button_last"><span class="icon"><i
+                                                    class="mdi mdi-menu-right mdi-24px"></i></span></button><button
+                                            class="button flip"
+                                            onclick="document.getElementsByClassName('flippable')[0].classList.toggle('flip')"><span
+                                                class="icon is-small"><i
+                                                    class="mdi mdi-swap-vertical"></i></span></button>
+                                    </div>
+                                    <div><input type="range" min="0" max="108" class="turn_slider" id="turn_slider">
                                     </div>
                                 </div>
                             </div>
-                            <!---->
-                        </div>
-                        <div>
-                            <div class="controller_group buttons has-addons is-centered is-paddingless"><button
-                                    class="button first" id="button_first"><span class="icon"><i
-                                            class="mdi mdi-menu-left mdi-24px"></i></span></button><button
-                                    class="button previous" id="button_previous"><span class="icon is-small"><i
-                                            class="mdi mdi-chevron-left"></i></span></button><button
-                                    class="button next" id="button_next"><span class="icon is-small"><i
-                                            class="mdi mdi-chevron-right"></i></span></button><button
-                                    class="button last" id="button_last"><span class="icon"><i
-                                            class="mdi mdi-menu-right mdi-24px"></i></span></button><button
-                                    class="button flip"
-                                    onclick="document.getElementsByClassName('flippable')[0].classList.toggle('flip')"><span
-                                        class="icon is-small"><i class="mdi mdi-swap-vertical"></i></span></button>
-                            </div>
-                            <div><input type="range" min="0" max="108" class="turn_slider" id="turn_slider"></div>
+                            <div class="sp_show_switches has-text-centered"><label
+                                    class="switch is-small is-rounded"><input type="checkbox" false-value="true"
+                                        value="false"
+                                        onclick="document.getElementsByClassName('has_player_name')[0].classList.toggle('is-invisible');document.getElementsByClassName('has_player_name')[1].classList.toggle('is-invisible');document.getElementsByClassName('has_player_name')[2].classList.toggle('is-invisible');">
+                                    <span class="check"></span> <span class="control-label"><span
+                                            class="icon is-small"><i
+                                                class="mdi mdi-account-remove"></i></span></span></label></div>
                         </div>
                     </div>
-                    <div class="sp_show_switches has-text-centered"><label class="switch is-small is-rounded"><input
-                                type="checkbox" false-value="true" value="false"
-                                onclick="document.getElementsByClassName('has_player_name')[0].classList.toggle('is-invisible');document.getElementsByClassName('has_player_name')[1].classList.toggle('is-invisible');document.getElementsByClassName('has_player_name')[2].classList.toggle('is-invisible');">
-                            <span class="check"></span> <span class="control-label"><span class="icon is-small"><i
-                                        class="mdi mdi-account-remove"></i></span></span></label></div>
+                    <div>
+                        <div id="kia_ak" style="margin-left: 30px; margin-top: 76px; border: 1px solid black; padding: 5px; width: 300px;height: 510px; font-family: monospace; overflow-y: scroll;">a</div>
+                    </div>
                 </div>
             </div>
         </div>
