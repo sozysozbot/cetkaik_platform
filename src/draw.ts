@@ -209,8 +209,8 @@ export function drawGameState(STATE: State) {
     document.getElementById("ia_side_piece_stand")!.innerHTML = Hop1Zuo1HTML(STATE.ia_side.hop1zuo1, STATE.ia_side.is_newly_acquired);
     document.getElementById("pieces_inner")!.innerHTML = FocusSteppedHTML(STATE.focus.stepped) +
         drawFocusSrc(STATE.focus.src) +
-        FocusPlannedDestHTML(STATE.focus.planned_dest) +
-        PiecesOnBoardHTML(STATE.board, STATE.focus.actual_dest);
+        FocusPlannedDestHTML(STATE.focus.initially_planned_dest) +
+        PiecesOnBoardHTML(STATE.board, STATE.focus.actual_final_dest);
 
 }
 

@@ -53,10 +53,14 @@ export type State = {
 	whose_turn: "ia_side" | "a_side" /*| "ambiguous_alpha" | "ambiguous_beta"*/ | null,
 	rate: Rate,
 	focus: {
-		actual_dest: AbsoluteCoord | null,
 		stepped: AbsoluteCoord | null,
 		src: AbsoluteCoord | null | "ia_side_hop1zuo1" | "a_side_hop1zuo1",
-		planned_dest: AbsoluteCoord | null
+		// |                        | Tam2       | when ciurl fails | when ok |
+		// |------------------------|------------|------------------|---------|
+		// | initially_planned_dest | firstDest  | dest             | dest    |
+		// | actual_final_dest      | secondDest | src              | dest    |
+		initially_planned_dest: AbsoluteCoord | null
+		actual_final_dest: AbsoluteCoord | null, 
 	},
 	board: Board,
 	ia_side: {

@@ -90,10 +90,10 @@ function getInitialState(o: {
 		rate: 1,
 		whose_turn: null,
 		focus: {
-			actual_dest: null,
+			actual_final_dest: null,
 			stepped: null,
 			src: null,
-			planned_dest: null
+			initially_planned_dest: null
 		},
 		board: getInitialBoard(),
 		ia_side: {
@@ -177,9 +177,9 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 	new_state.a_side.is_newly_acquired = false;
 	new_state.focus = {
 		src: null,
-		actual_dest: null,
+		actual_final_dest: null,
 		stepped: null,
-		planned_dest: null
+		initially_planned_dest: null
 	};
 
 	if (body_element.type === "season_ends") {
@@ -213,8 +213,8 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 		remove_from_hop1zuo1(new_state, { color, prof, is_aside });
 		set_to(new_state, data.dest, { color, prof, is_aside });
 		new_state.focus = {
-			actual_dest: data.dest,
-			planned_dest: data.dest,
+			actual_final_dest: data.dest,
+			initially_planned_dest: data.dest,
 			stepped: null,
 			src: is_aside ? "a_side_hop1zuo1" : "ia_side_hop1zuo1"
 		}
@@ -234,17 +234,17 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 				}
 				new_state.focus = {
 					src: body_element.movement.data.src,
-					actual_dest: body_element.movement.data.dest,
+					actual_final_dest: body_element.movement.data.dest,
 					stepped: null,
-					planned_dest: body_element.movement.data.dest
+					initially_planned_dest: body_element.movement.data.dest
 				};
 			} else {
 				// failed attempt
 				new_state.focus = {
 					src: body_element.movement.data.src,
-					actual_dest: body_element.movement.data.src,
+					actual_final_dest: body_element.movement.data.src,
 					stepped: null,
-					planned_dest: body_element.movement.data.dest
+					initially_planned_dest: body_element.movement.data.dest
 				};
 			}
 		} else if (body_element.movement.data.type === "SrcStepDst") {
@@ -255,17 +255,17 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 					set_hop1zuo1(new_state, maybe_captured_piece)
 				}
 				new_state.focus = {
-					actual_dest: body_element.movement.data.dest,
+					actual_final_dest: body_element.movement.data.dest,
 					stepped: body_element.movement.data.step,
-					planned_dest: body_element.movement.data.dest,
+					initially_planned_dest: body_element.movement.data.dest,
 					src: body_element.movement.data.src
 				};
 			} else {
 				// failed attempt
 				new_state.focus = {
-					actual_dest: body_element.movement.data.src,
+					actual_final_dest: body_element.movement.data.src,
 					stepped: body_element.movement.data.step,
-					planned_dest: body_element.movement.data.dest, src: body_element.movement.data.src
+					initially_planned_dest: body_element.movement.data.dest, src: body_element.movement.data.src
 				};
 			}
 		} else {
@@ -287,6 +287,17 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 			new_state.whose_turn = "ia_side";
 		}
 
+		const piece = remove_from(new_state, body_element.movement.src);
+		const maybe_captured_piece = set_to(new_state, body_element.movement.secondDest, piece);
+		if (maybe_captured_piece) {
+			throw new Error(`エラー: 皇が行こうとしている${body_element.movement.secondDest[1]}${body_element.movement.secondDest[0]}には${maybe_captured_piece.color}${maybe_captured_piece.prof}が既にあります`)
+		}
+		new_state.focus = {
+			src: body_element.movement.src,
+			stepped: body_element.movement.stepStyle === "NoStep" ? null : body_element.movement.step,
+			actual_final_dest: body_element.movement.secondDest,
+			initially_planned_dest: body_element.movement.firstDest
+		}
 	} else {
 		const _: never = body_element;
 		throw new Error("Should not reach here: invalid value in body_element.type");
