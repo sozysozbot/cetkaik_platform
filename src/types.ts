@@ -1,4 +1,5 @@
 import { AbsoluteColumn, AbsoluteRow, AbsoluteCoord, Color, Profession, Season } from "cerke_online_api";
+import { Hand } from "cerke_hands_and_score"
 
 export type HanziProfession = "船" | "無" | "兵" | "弓" | "車" | "虎" | "馬" | "筆" | "巫" | "将" | "王";
 export type HanziProfessionAndTam = HanziProfession | "皇";
@@ -21,7 +22,7 @@ export type Board = {
 
 export type HanziSeason = "春" | "夏" | "秋" | "冬";
 export function fromHanziSeason(s: HanziSeason): Season {
-	if (s === "春") return 0; 
+	if (s === "春") return 0;
 	else if (s === "夏") return 1;
 	else if (s === "秋") return 2;
 	else if (s === "冬") return 3;
@@ -47,6 +48,8 @@ export function toHanziProfession(p: Profession): HanziProfession {
 	if (p === Profession.Uai1) return "将";
 	throw new Error(`Should not reach here: Unexpected profession ${p}`)
 }
+
+export type Dat2Display = { type: "tymok" | "taxot", hands: Hand[] } | null;
 export type State = {
 	season: HanziSeason,
 	turn: number,
@@ -60,7 +63,7 @@ export type State = {
 		// | initially_planned_dest | firstDest  | dest             | dest    |
 		// | actual_final_dest      | secondDest | src              | dest    |
 		initially_planned_dest: AbsoluteCoord | null
-		actual_final_dest: AbsoluteCoord | null, 
+		actual_final_dest: AbsoluteCoord | null,
 	},
 	board: Board,
 	ia_side: {
@@ -76,7 +79,8 @@ export type State = {
 		hop1zuo1: { color: HanziColor, prof: HanziProfession, is_aside: true }[],
 		score: number,
 		is_newly_acquired: boolean,
-	}
+	},
+	dat2_list_on_display: Dat2Display,
 }
 
 export type NonTamPiece = { color: HanziColor, prof: HanziProfession, is_aside: boolean };

@@ -1,5 +1,5 @@
 import { AbsoluteColumn, AbsoluteRow, AbsoluteCoord } from "cerke_online_api";
-import { NonTamPiece, State, HanziProfessionAndTam, profs, Board } from "./types";
+import { NonTamPiece, State, HanziProfessionAndTam, profs, Board, Dat2Display } from "./types";
 
 export const height = 387;
 export const left_margin = 40;
@@ -220,8 +220,18 @@ export function drawGameState(STATE: State) {
     document.getElementById("pieces_inner")!.innerHTML = FocusSteppedHTML(STATE.focus.stepped) +
         drawFocusSrc(STATE.focus.src) +
         FocusPlannedDestHTML(STATE.focus.initially_planned_dest) +
-        PiecesOnBoardHTML(STATE.board, STATE.focus.actual_final_dest);
+        PiecesOnBoardHTML(STATE.board, STATE.focus.actual_final_dest) + Dat2ListHTML(STATE.dat2_list_on_display);
 
+}
+
+function Dat2ListHTML(a: Dat2Display): string {
+    if (!a) return "";
+    return `<div style="    position: absolute;
+    width: 469px;
+    height: 256px;
+    top: 107px;
+    left: 0px;
+    background-color: rgba(0,0,0,80%); color: white">${[...a.hands, a.type === "taxot" ? "終季" : "再行"].join("<br>")}</div>`
 }
 
 function NormalPieceHTML(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {

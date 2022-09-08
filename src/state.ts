@@ -110,6 +110,7 @@ function getInitialState(o: {
 			score: 20,
 			is_newly_acquired: false,
 		},
+		dat2_list_on_display: null,
 	}
 }
 
@@ -273,13 +274,13 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 			throw new Error(`Should not reach here: invalid value in body_element.movement.data.type`);
 		}
 	} else if (body_element.type === "end_season") {
-
+		new_state.dat2_list_on_display = null;
 	} else if (body_element.type === "game_set") {
 
 	} else if (body_element.type === "taxot") {
-
+		new_state.dat2_list_on_display = { type: "taxot", hands: body_element.hands };
 	} else if (body_element.type === "tymok") {
-
+		new_state.dat2_list_on_display = { type: "tymok", hands: body_element.hands };
 	} else if (body_element.type === "tam_move") {
 		if (old_state.whose_turn === "ia_side") {
 			new_state.whose_turn = "a_side";
