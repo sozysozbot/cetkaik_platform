@@ -7,12 +7,25 @@
     <link href="https://cdn.materialdesignicons.com/5.1.45/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="main3.css" rel="stylesheet">
     <link href="cetkaik.css" rel="stylesheet">
+    <!--<link href="bundle.css" rel="stylesheet">-->
+    <style>
+        @media print, screen and (min-width:769px) {
+            .modal-card, .modal-content {
+                margin: 0 auto;
+                max-height: calc(100vh - 40px);
+                width: 940px
+            }
+        }
+        .is-cetkaik-player-modal-card .modal-card-body {
+            overflow-x: scroll
+        }
+    </style>
     <script src="bundle.js"></script>
     <title>cetkaik extend</title>
 </head>
 
 <body>
-    <div tabindex="-1" class="modal is-active is-full-screen">
+    <div tabindex="-1" class="modal is-active">
         <div class="modal-background"></div>
         <div class="animation-content">
             <div class="sp_show modal-card is-cetkaik-player-modal-card">
