@@ -70,6 +70,8 @@ ZI船ZIA無撃裁手黒王
     const parsed: Parsed = parseCerkeOnlineKia1Ak1(case3);
     const states: State[] = getAllStatesFromParsed(parsed);
 
+    document.getElementById("kia_ak")!.textContent = case3;
+
     drawEmptyBoard();
     const turn_slider = document.getElementById("turn_slider")! as HTMLInputElement;
     turn_slider.min = "0";

@@ -196,6 +196,16 @@ function Hop1Zuo1HTML(pieces: NonTamPiece[], is_newly_acquired: boolean) {
 }
 
 export function drawGameState(STATE: State) {
+    if (STATE.whose_turn === "a_side") {
+        document.getElementById("a_side_container")!.classList.add("turn_active");
+        document.getElementById("ia_side_container")!.classList.remove("turn_active");
+    } else if (STATE.whose_turn === "ia_side") {
+        document.getElementById("a_side_container")!.classList.remove("turn_active");
+        document.getElementById("ia_side_container")!.classList.add("turn_active");
+    } else {
+        document.getElementById("a_side_container")!.classList.remove("turn_active");
+        document.getElementById("ia_side_container")!.classList.remove("turn_active");
+    }
     document.getElementById("season_text")!.innerHTML = STATE.season;
     document.getElementById("turn_text")!.innerHTML = STATE.turn + "";
     document.getElementById("rate_text")!.innerHTML = STATE.rate + "";

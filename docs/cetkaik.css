@@ -13,3 +13,16 @@
 .place_56, .place_57, .place_54, .place_53, .place_65, .place_75, .place_45, .place_35 {
     background-color: hsl(213, 33.6%, 78.9%);
 }
+
+#kia_ak {
+    margin-left: 30px;
+    margin-top: 76px;
+    border: 1px solid black;
+    padding: 5px;
+    width: 300px;
+    height: 510px;
+    font-family: monospace;
+    overflow-y: scroll;
+    white-space: pre-wrap;
+    font-size: 10px;
+}
