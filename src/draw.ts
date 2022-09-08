@@ -1,5 +1,5 @@
 import { AbsoluteColumn, AbsoluteRow, AbsoluteCoord } from "cerke_online_api";
-import { NonTamPiece, State, HanziProfessionAndTam, profs, Board, Dat2Display } from "./types";
+import { NonTamPiece, State, HanziProfessionAndTam, profs, Board, OverlayedMessage } from "./types";
 
 export const height = 387;
 export const left_margin = 40;
@@ -221,12 +221,28 @@ export function drawGameState(STATE: State) {
         drawFocusSrc(STATE.focus.src) +
         FocusPlannedDestHTML(STATE.focus.initially_planned_dest) +
         PiecesOnBoardHTML(STATE.board, STATE.focus.actual_final_dest);
-    document.getElementById("yaku_display")!.innerHTML = Dat2ListHTML(STATE.dat2_list_on_display);
+    document.getElementById("yaku_display")!.innerHTML = OverlayedMessageHTML(STATE.overlayed_message);
 
 }
 
-function Dat2ListHTML(a: Dat2Display): string {
+function OverlayedMessageHTML(a: OverlayedMessage | null): string {
     if (!a) return "";
+    const content = ((a: OverlayedMessage) => {
+        if (a.type === "before_taxot" || a.type === "before_tymok") {
+            return a.hands.join("<br>");
+        } else if (a.type === "end_season") {
+            return `終季<br>${a.score}`;
+        } else if (a.type === "go_again") {
+            return `再行`
+        } else if (a.type === "game_set") {
+            return `星一周`
+        } else if (a.type === "season_ends") {
+            return `${a.season}終`
+        } else {
+            const _ : never = a;
+            throw new Error(`Should not reach here: Dat2Display.type is invalid`)
+        }
+    })(a);
     return `<div style="position: absolute;
     width: 469px;
     height: 256px;
@@ -234,7 +250,7 @@ function Dat2ListHTML(a: Dat2Display): string {
     left: 44px;
     background-color: rgba(0,0,0,80%);
     color: white;
-}">${[...a.hands, a.type === "taxot" ? "終季" : "再行"].join("<br>")}</div>`
+}">${content}</div>`
 }
 
 function NormalPieceHTML(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {
@@ -269,7 +285,6 @@ function PositionedPieceOnBoardHTML(clm: AbsoluteColumn, rw: AbsoluteRow, piece:
 
 export function highlightNthKia1Ak1(kiar_ark: string, n: number) {
     const lines = kiar_ark.trim().split("\n");
-    console.log(lines);
     // when n = 0, nothing should be highlighted
     for (let i = 3; i < lines.length; i++) {
         if (lines[i].trim() === "") continue;

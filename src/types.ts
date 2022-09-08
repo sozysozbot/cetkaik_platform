@@ -49,7 +49,12 @@ export function toHanziProfession(p: Profession): HanziProfession {
 	throw new Error(`Should not reach here: Unexpected profession ${p}`)
 }
 
-export type Dat2Display = { type: "tymok" | "taxot", hands: Hand[] } | null;
+export type OverlayedMessage = { type: "before_tymok", hands: Hand[] }
+	| { type: "before_taxot", hands: Hand[], score: number }
+	| { type: "go_again" }
+	| { type: "end_season", score: number }
+	| { type: "game_set" }
+	| { type: "season_ends", season: HanziSeason };
 export type State = {
 	season: HanziSeason,
 	turn: number,
@@ -80,7 +85,7 @@ export type State = {
 		score: number,
 		is_newly_acquired: boolean,
 	},
-	dat2_list_on_display: Dat2Display,
+	overlayed_message: OverlayedMessage | null,
 }
 
 export type NonTamPiece = { color: HanziColor, prof: HanziProfession, is_aside: boolean };

@@ -110,7 +110,7 @@ function getInitialState(o: {
 			score: 20,
 			is_newly_acquired: false,
 		},
-		dat2_list_on_display: null,
+		overlayed_message: null,
 	}
 }
 
@@ -172,7 +172,6 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 		new_state.whose_turn = starting_players[fromHanziSeason(old_state.season)] === "赤" ? "a_side" : "ia_side";
 	}
 
-
 	// clear the flags
 	new_state.ia_side.is_newly_acquired = false;
 	new_state.a_side.is_newly_acquired = false;
@@ -182,6 +181,7 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 		stepped: null,
 		initially_planned_dest: null
 	};
+	new_state.overlayed_message = null;
 
 	if (body_element.type === "season_ends") {
 		if (old_state.season === "冬") {
@@ -193,8 +193,24 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 					old_state.season === "秋" ? "冬" :
 						(() => { throw new Error() })();
 		new_state.turn = 0;
+		new_state.whose_turn = null;
 		new_state.board = getInitialBoard();
-		return new_state;
+		new_state.overlayed_message = { type: "season_ends", season: old_state.season }
+		new_state.a_side.hop1zuo1 = [];
+		new_state.ia_side.hop1zuo1 = [];
+	} else if (body_element.type === "go_again") {
+		new_state.overlayed_message = { type: "go_again" };
+	} else if (body_element.type === "game_set") {
+		new_state.overlayed_message = { type: "game_set" };
+	} else if (body_element.type === "before_taxot") {
+		new_state.overlayed_message = { type: "before_taxot", hands: body_element.hands, score: body_element.score };
+	} else if (body_element.type === "before_tymok") {
+		new_state.overlayed_message = { type: "before_tymok", hands: body_element.hands };
+	} else if (body_element.type === "end_season") {
+		if (old_state.overlayed_message?.type !== "before_taxot") {
+			throw new Error("エラー: 「終季」の前には、獲得した役の一覧が必要です");
+		}
+		new_state.overlayed_message = { type: "end_season", score: old_state.overlayed_message.score };
 	} else if (body_element.type === "from_hopzuo") {
 		if (old_state.whose_turn === "ia_side") {
 			new_state.whose_turn = "a_side";
@@ -273,14 +289,7 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 			const _: never = body_element.movement.data;
 			throw new Error(`Should not reach here: invalid value in body_element.movement.data.type`);
 		}
-	} else if (body_element.type === "end_season") {
-		new_state.dat2_list_on_display = null;
-	} else if (body_element.type === "game_set") {
-
-	} else if (body_element.type === "taxot") {
-		new_state.dat2_list_on_display = { type: "taxot", hands: body_element.hands };
-	} else if (body_element.type === "tymok") {
-		new_state.dat2_list_on_display = { type: "tymok", hands: body_element.hands };
+	
 	} else if (body_element.type === "tam_move") {
 		if (old_state.whose_turn === "ia_side") {
 			new_state.whose_turn = "a_side";
@@ -322,7 +331,7 @@ export function getAllStatesFromParsed(parsed: Readonly<Parsed>): State[] {
 			try {
 				return getNextState(current_state, parsed.parsed_bodies[i], parsed.starting_players.split("") as HanziColor[])
 			} catch (e: any) {
-				console.log(`${i}ステップ目での${e}`);
+				alert(`${i}ステップ目での${e}`);
 				return current_state;
 			}
 		})();
