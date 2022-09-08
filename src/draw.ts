@@ -206,7 +206,7 @@ export function drawGameState(STATE: State) {
         document.getElementById("a_side_container")!.classList.remove("turn_active");
         document.getElementById("ia_side_container")!.classList.remove("turn_active");
     }
-    document.getElementById("season_text")!.innerHTML = STATE.season;
+    document.getElementById("season_text")!.innerHTML = STATE.game_has_ended ? "星一周" : STATE.season;
     document.getElementById("turn_text")!.innerHTML = STATE.turn + "";
     document.getElementById("rate_text")!.innerHTML = STATE.rate + "";
     document.getElementById("ia_side_player_name_short_text")!.innerHTML = STATE.ia_side.player_name_short;

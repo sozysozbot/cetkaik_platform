@@ -86,6 +86,7 @@ function getInitialState(o: {
 }): State {
 	return {
 		season: "春",
+		game_has_ended: false,
 		turn: 0,
 		rate: 1,
 		whose_turn: null,
@@ -184,14 +185,26 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 	new_state.overlayed_message = null;
 
 	if (body_element.type === "season_ends") {
-		if (old_state.season === "冬") {
-			return null;
+		if (old_state.overlayed_message?.type !== "end_season") {
+			throw new Error(`エラー: 「${old_state.season}終」の前には、「終季」が必要です`);
 		}
+		if (old_state.whose_turn === "a_side") {
+			new_state.a_side.score += old_state.overlayed_message.score;
+			new_state.ia_side.score -= old_state.overlayed_message.score;
+		} else if (old_state.whose_turn === "ia_side") {
+			new_state.ia_side.score += old_state.overlayed_message.score;
+			new_state.a_side.score -= old_state.overlayed_message.score;
+		} else {
+			throw new Error(`エラー: どのプレイヤーの行為によって季節が終わったのかが明らかではありません`);
+		}
+
 		new_state.season =
 			old_state.season === "春" ? "夏" :
 				old_state.season === "夏" ? "秋" :
 					old_state.season === "秋" ? "冬" :
-						(() => { throw new Error() })();
+						old_state.season === "冬" ? "春" /* dummy */ :
+							(() => { throw new Error(`Should not reach here: invalid season`) })();
+		new_state.game_has_ended = old_state.season === "冬";
 		new_state.turn = 0;
 		new_state.whose_turn = null;
 		new_state.board = getInitialBoard();
@@ -202,6 +215,8 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 		new_state.overlayed_message = { type: "go_again" };
 	} else if (body_element.type === "game_set") {
 		new_state.overlayed_message = { type: "game_set" };
+		new_state.game_has_ended = true;
+		new_state.whose_turn = null;
 	} else if (body_element.type === "before_taxot") {
 		new_state.overlayed_message = { type: "before_taxot", hands: body_element.hands, score: body_element.score };
 	} else if (body_element.type === "before_tymok") {
@@ -289,7 +304,7 @@ export function getNextState(old_state: Readonly<State>, body_element: BodyEleme
 			const _: never = body_element.movement.data;
 			throw new Error(`Should not reach here: invalid value in body_element.movement.data.type`);
 		}
-	
+
 	} else if (body_element.type === "tam_move") {
 		if (old_state.whose_turn === "ia_side") {
 			new_state.whose_turn = "a_side";

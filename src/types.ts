@@ -57,6 +57,7 @@ export type OverlayedMessage = { type: "before_tymok", hands: Hand[] }
 	| { type: "season_ends", season: HanziSeason };
 export type State = {
 	season: HanziSeason,
+	game_has_ended: boolean, // when `true`, `season` above should be ignored and instead should display `星一周`
 	turn: number,
 	whose_turn: "ia_side" | "a_side" /*| "ambiguous_alpha" | "ambiguous_beta"*/ | null,
 	rate: Rate,
