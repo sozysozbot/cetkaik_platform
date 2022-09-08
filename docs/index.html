@@ -9,15 +9,27 @@
     <link href="cetkaik.css" rel="stylesheet">
     <!--<link href="bundle.css" rel="stylesheet">-->
     <style>
-        @media print, screen and (min-width:769px) {
-            .modal-card, .modal-content {
+        @media print,
+        screen and (min-width:769px) {
+
+            .modal-card,
+            .modal-content {
                 margin: 0 auto;
                 max-height: calc(100vh - 40px);
                 width: 940px
             }
         }
-        .is-cetkaik-player-modal-card .modal-card-body {
+
+        /*.is-cetkaik-player-modal-card .modal-card-body {
             overflow-x: scroll
+        }*/
+
+        .modal-background {
+            background-color: #99a895;
+        }
+
+        .modal-card-body {
+            border-radius: 20px;
         }
     </style>
     <script src="bundle.js"></script>
@@ -34,8 +46,7 @@
                         <div class="is-size-7 has-text-centered"><span style="visibility: visible;"
                                 class="has_player_name"><span id="ia_side_player_name_text"></span> vs
                                 <span id="a_side_player_name_text"></span></span></div>
-                        <div
-                            class="cetkaik-player theme-simple size-medium run_mode-view_mode horizontal">
+                        <div class="cetkaik-player theme-simple size-medium run_mode-view_mode horizontal">
 
                             <div class="turn_edit_container">
                                 <div class="turn_number_area"><span class="turn_edit_text">
@@ -104,7 +115,9 @@
                         </div>
                     </div>
                     <div>
-                        <div id="kia_ak" style="margin-left: 30px; margin-top: 76px; border: 1px solid black; padding: 5px; width: 300px;height: 510px; font-family: monospace; overflow-y: scroll;">a</div>
+                        <div id="kia_ak"
+                            style="margin-left: 30px; margin-top: 76px; border: 1px solid black; padding: 5px; width: 300px;height: 510px; font-family: monospace; overflow-y: scroll;">
+                            a</div>
                     </div>
                 </div>
             </div>
