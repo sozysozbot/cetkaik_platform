@@ -98,7 +98,7 @@ function get_top_left(coord: AbsoluteCoord) {
     return { left, top }
 }
 
-export function drawFocusPlannedDest(focus_planned_dest: AbsoluteCoord | null): string {
+export function FocusPlannedDestHTML(focus_planned_dest: AbsoluteCoord | null): string {
     if (!focus_planned_dest) return "";
     const circle_radius = 18;
     const { top, left } = get_top_left(focus_planned_dest);
@@ -114,7 +114,7 @@ export function drawFocusPlannedDest(focus_planned_dest: AbsoluteCoord | null): 
     "></div>`;
 }
 
-export function drawFocusStepped(focus_stepped: AbsoluteCoord | null): string {
+export function FocusSteppedHTML(focus_stepped: AbsoluteCoord | null): string {
     if (!focus_stepped) return "";
     const circle_radius = 18;
     const { top, left } = get_top_left(focus_stepped);
@@ -130,8 +130,8 @@ export function drawFocusStepped(focus_stepped: AbsoluteCoord | null): string {
     "></div>`;
 }
 
-export function drawFocusSrc(focus_src: AbsoluteCoord | null): string {
-    if (!focus_src) return "";
+export function drawFocusSrc(focus_src: AbsoluteCoord | "a_side_hop1zuo1" | "ia_side_hop1zuo1" | null): string {
+    if (!focus_src || focus_src === "a_side_hop1zuo1" || focus_src === "ia_side_hop1zuo1") return "";
     const circle_radius = 18;
     const { top, left } = get_top_left(focus_src);
     return `
@@ -146,12 +146,12 @@ export function drawFocusSrc(focus_src: AbsoluteCoord | null): string {
     "></div>`;
 }
 
-function drawPiecesOnBoard(board: Board, focus: AbsoluteCoord | null): string {
+function PiecesOnBoardHTML(board: Board, focus: AbsoluteCoord | null): string {
     let ans = "";
     for (const clm in board) {
         for (const rw in board[clm as AbsoluteColumn]) {
             const is_focused = focus ? focus[1] === clm && focus[0] === rw : false;
-            ans += positionPieceOnBoard(
+            ans += PositionedPieceOnBoardHTML(
                 clm as AbsoluteColumn,
                 rw as AbsoluteRow,
                 board[clm as AbsoluteColumn]![rw as AbsoluteRow]!,
@@ -164,7 +164,7 @@ function drawPiecesOnBoard(board: Board, focus: AbsoluteCoord | null): string {
 }
 
 
-function getHop1Zuo1HTML(pieces: NonTamPiece[], is_newly_acquired: boolean) {
+function Hop1Zuo1HTML(pieces: NonTamPiece[], is_newly_acquired: boolean) {
     let ans = "";
     for (let i = 0; i < pieces.length; i++) {
         const { color, prof } = pieces[i];
@@ -176,16 +176,19 @@ function getHop1Zuo1HTML(pieces: NonTamPiece[], is_newly_acquired: boolean) {
                 transform: scale(0.26); 
                 transform-origin: top left; 
             ">
-                ${renderNormalPiece(color, prof, false)}
+                
                 ${is_newly_acquired && i == pieces.length - 1 ? `<div style="
                     position: absolute;
+                    transform: rotate(45deg);
+                    transform-origin: center;
                     left: ${42 - rad}px;
                     top: ${42 - rad}px;
                     width: ${rad * 2}px;
                     height: ${rad * 2}px;
-                    border-radius: 50%;
-                    background-color: rgba(0, 60, 60, 0.3);
+                    border-radius: 25%;
+                    background-color: rgba(0, 60, 50, 0.3);
                 "></div>` : ""}
+                ${NormalPieceHTML(color, prof, false)}
             </div>
         </li>`;
     }
@@ -200,17 +203,18 @@ export function drawGameState(STATE: State) {
     document.getElementById("a_side_player_name_short_text")!.innerHTML = STATE.a_side.player_name_short;
     document.getElementById("a_side_player_name_text")!.innerHTML = STATE.a_side.player_name;
     document.getElementById("ia_side_player_name_text")!.innerHTML = STATE.ia_side.player_name;
-    document.getElementById("a_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.a_side.hop1zuo1, STATE.a_side.is_newly_acquired);
-    document.getElementById("ia_side_piece_stand")!.innerHTML = getHop1Zuo1HTML(STATE.ia_side.hop1zuo1, STATE.ia_side.is_newly_acquired);
     document.getElementById("a_side_current_score")!.innerHTML = STATE.a_side.score + "";
     document.getElementById("ia_side_current_score")!.innerHTML = STATE.ia_side.score + "";
-    document.getElementById("pieces_inner")!.innerHTML = drawFocusStepped(STATE.focus.stepped) +
+    document.getElementById("a_side_piece_stand")!.innerHTML = Hop1Zuo1HTML(STATE.a_side.hop1zuo1, STATE.a_side.is_newly_acquired);
+    document.getElementById("ia_side_piece_stand")!.innerHTML = Hop1Zuo1HTML(STATE.ia_side.hop1zuo1, STATE.ia_side.is_newly_acquired);
+    document.getElementById("pieces_inner")!.innerHTML = FocusSteppedHTML(STATE.focus.stepped) +
         drawFocusSrc(STATE.focus.src) +
-        drawFocusPlannedDest(STATE.focus.planned_dest) +
-        drawPiecesOnBoard(STATE.board, STATE.focus.actual_dest);
+        FocusPlannedDestHTML(STATE.focus.planned_dest) +
+        PiecesOnBoardHTML(STATE.board, STATE.focus.actual_dest);
+
 }
 
-function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {
+function NormalPieceHTML(color: "黒" | "赤", prof: HanziProfessionAndTam, is_bold: boolean) {
     const x = profs.indexOf(prof) * -100 - 27;
     const y = is_bold ? 0 : -277;
     const color_path = {
@@ -223,18 +227,18 @@ function renderNormalPiece(color: "黒" | "赤", prof: HanziProfessionAndTam, is
 }
 
 
-function positionPieceOnBoard(clm: AbsoluteColumn, rw: AbsoluteRow, piece: NonTamPiece | "皇", is_bold: boolean) {
+function PositionedPieceOnBoardHTML(clm: AbsoluteColumn, rw: AbsoluteRow, piece: NonTamPiece | "皇", is_bold: boolean) {
     const { left, top } = get_top_left([rw, clm]);
     if (piece === "皇") {
         return `
         <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${"rotate(90deg)"}">
-            ${renderNormalPiece("黒", "皇", is_bold)}
+            ${NormalPieceHTML("黒", "皇", is_bold)}
         </div>`;
     } else {
         const { color, prof, is_aside } = piece;
         return `
         <div style="position: absolute; left: ${left}px; top: ${top}px; transform: scale(0.26) ${is_aside ? "rotate(180deg)" : ""}">
-            ${renderNormalPiece(color, prof, is_bold)}
+            ${NormalPieceHTML(color, prof, is_bold)}
         </div>`;
     }
 

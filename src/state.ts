@@ -1,6 +1,6 @@
 import { BodyElement, Parsed, CiurlEvent } from "cerke_online_kiaak_parser";
-import { Board, NonTamPiece, State } from "./types";
-import { AbsoluteCoord } from "cerke_online_api";
+import { Board, fromHanziSeason, HanziColor, HanziProfession, NonTamPiece, State, toHanziColor, toHanziProfession } from "./types";
+import { AbsoluteCoord, Color, Profession } from "cerke_online_api";
 
 function getInitialBoard(): Board {
 	return {
@@ -88,6 +88,7 @@ function getInitialState(o: {
 		season: "春",
 		turn: 0,
 		rate: 1,
+		whose_turn: null,
 		focus: {
 			actual_dest: null,
 			stepped: null,
@@ -143,6 +144,14 @@ function set_hop1zuo1(state: State, piece: NonTamPiece) {
 	}
 }
 
+function remove_from_hop1zuo1(state: State, o: { color: HanziColor, prof: HanziProfession, is_aside: boolean }) {
+	const index = state[o.is_aside ? "a_side" : "ia_side"].hop1zuo1.findIndex(k => k.color === o.color && k.prof === o.prof);
+	if (index === -1) {
+		throw new Error(`エラー: 持ち駒に${o.color}${o.prof}がありません`);
+	}
+	state[o.is_aside ? "a_side" : "ia_side"].hop1zuo1.splice(index, 1);
+}
+
 function isSuccessfullyCompleted(ciurl_event: CiurlEvent): boolean {
 	if (ciurl_event.type === "no_ciurl_event") {
 		return true;
@@ -156,8 +165,12 @@ function isSuccessfullyCompleted(ciurl_event: CiurlEvent): boolean {
 	}
 }
 
-export function getNextState(current_state: Readonly<State>, body_element: BodyElement): State | null {
-	const new_state: State = JSON.parse(JSON.stringify(current_state));
+export function getNextState(old_state: Readonly<State>, body_element: BodyElement, starting_players: HanziColor[]): State | null {
+	const new_state: State = JSON.parse(JSON.stringify(old_state));
+	if (old_state.whose_turn === null) {
+		new_state.whose_turn = starting_players[fromHanziSeason(old_state.season)] === "赤" ? "a_side" : "ia_side";
+	}
+
 
 	// clear the flags
 	new_state.ia_side.is_newly_acquired = false;
@@ -170,19 +183,47 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 	};
 
 	if (body_element.type === "season_ends") {
-		if (current_state.season === "冬") {
+		if (old_state.season === "冬") {
 			return null;
 		}
 		new_state.season =
-			current_state.season === "春" ? "夏" :
-				current_state.season === "夏" ? "秋" :
-					current_state.season === "秋" ? "冬" :
+			old_state.season === "春" ? "夏" :
+				old_state.season === "夏" ? "秋" :
+					old_state.season === "秋" ? "冬" :
 						(() => { throw new Error() })();
 		new_state.turn = 0;
+		new_state.board = getInitialBoard();
 		return new_state;
 	} else if (body_element.type === "from_hopzuo") {
-
+		if (old_state.whose_turn === "ia_side") {
+			new_state.whose_turn = "a_side";
+		} else if (old_state.whose_turn === "a_side") {
+			new_state.whose_turn = "ia_side";
+		}
+		new_state.turn++;
+		const data: {
+			type: "FromHop1Zuo1";
+			color: Color;
+			prof: Profession;
+			dest: AbsoluteCoord;
+		} = body_element.movement.data;
+		const color = toHanziColor(data.color);
+		const prof = toHanziProfession(data.prof);
+		const is_aside = new_state.whose_turn === "a_side";
+		remove_from_hop1zuo1(new_state, { color, prof, is_aside });
+		set_to(new_state, data.dest, { color, prof, is_aside });
+		new_state.focus = {
+			actual_dest: data.dest,
+			planned_dest: data.dest,
+			stepped: null,
+			src: is_aside ? "a_side_hop1zuo1" : "ia_side_hop1zuo1"
+		}
 	} else if (body_element.type === "normal_move") {
+		if (old_state.whose_turn === "ia_side") {
+			new_state.whose_turn = "a_side";
+		} else if (old_state.whose_turn === "a_side") {
+			new_state.whose_turn = "ia_side";
+		}
 		new_state.turn++;
 		if (body_element.movement.data.type === "SrcDst") {
 			if (isSuccessfullyCompleted(body_element.ciurl_and_capture.ciurl_event)) {
@@ -240,6 +281,11 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 	} else if (body_element.type === "tymok") {
 
 	} else if (body_element.type === "tam_move") {
+		if (old_state.whose_turn === "ia_side") {
+			new_state.whose_turn = "a_side";
+		} else if (old_state.whose_turn === "a_side") {
+			new_state.whose_turn = "ia_side";
+		}
 
 	} else {
 		const _: never = body_element;
@@ -249,6 +295,11 @@ export function getNextState(current_state: Readonly<State>, body_element: BodyE
 }
 
 export function getAllStatesFromParsed(parsed: Readonly<Parsed>): State[] {
+	if (!parsed.starting_players) {
+		throw new Error(`todo: current implementation requires 一位色. 
+		To resolve this, I would need to uncomment "ambiguous_alpha" | "ambiguous_beta"
+		in State.whose_turn して、皇以外の駒を動かしたらそれを元に逆に辿って解消する、みたいなのを入れる必要がある。`);
+	}
 	let current_state = getInitialState({
 		ia_side: { player_name_short: "張", player_name: "張三" },
 		a_side: { player_name_short: "李", player_name: "李四" }
@@ -257,7 +308,7 @@ export function getAllStatesFromParsed(parsed: Readonly<Parsed>): State[] {
 	for (let i = 0; i < parsed.parsed_bodies.length; i++) {
 		const next_state = (() => {
 			try {
-				return getNextState(current_state, parsed.parsed_bodies[i])
+				return getNextState(current_state, parsed.parsed_bodies[i], parsed.starting_players.split("") as HanziColor[])
 			} catch (e: any) {
 				console.log(`${i}ステップ目での${e}`);
 				return current_state;

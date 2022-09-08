@@ -4,57 +4,70 @@ import { getAllStatesFromParsed } from './state';
 import { State } from './types';
 
 window.addEventListener('load', () => {
-    const case1 =
-	`{一位色:黒黒黒}
-{始時:2022-05-31T17:16:02.433Z}
-{終時:2022-05-31T18:13:52.357Z}
-MAU弓MAIMY橋五    PE巫PIPU無撃裁
-CAI兵CAU無撃裁    ME弓CE無撃裁
-PAU巫CAUCAI無撃裁    ZA王ZE無撃裁
-MY弓MIMA橋一此無    CI兵MIMU無撃裁
-CAI巫CAMA橋一手赤馬    PA筆MA無撃裁手赤巫
-LAU弓LAILY橋三    TE虎NITU橋一
-LY弓LILE橋三手赤弓    KA筆KELE無撃裁手黒弓
-MY弓MU無撃裁手黒兵
+    const case3 =
+	`{一位色:赤赤赤}
+{始時:2022-04-01T17:00:24.278Z}
+{終時:2022-04-01T17:59:40.857Z}
+LE弓LILU橋二    XAU虎ZAITY無撃裁
+LU弓LAILAU橋一手黒弓    KAU巫LAU無撃裁手赤弓
+NI兵NE無撃裁    赤弓NO
+NA車NI無撃裁    KIA筆KAIKY橋一
+NE兵NINO水二此無    KY筆KIKE橋二手赤巫
+KA筆KE無撃裁手赤筆    ZO皇[TU]ZU
+XE虎CIXU橋四    NAI兵NAU無撃裁
+NE兵NINO水三手赤弓    TY虎XU無撃裁手黒虎
+TE虎ZIXU橋四手赤虎    LAU巫NAUNAI無撃裁
+XU虎NAI無撃裁手黒巫    TAU虎NAI無撃裁手赤虎
+XI兵XU無撃裁    NAI虎XU無撃裁手赤兵
+ZA王XACE無撃裁    赤巫NAI
+黒弓ZO    ZAI船ZO無撃裁手黒弓
+ME弓CEXE橋三    ZO船NO無撃裁手黒兵
+CE王MIPU無撃裁    NAI巫XUPU橋二此無
+NI車KA無撃裁    NAI巫XUPU橋二此無
+XE弓XUZO橋一水三    NAI巫XUCU橋二
+ZO弓CAIZIA橋三手黒王
 
-或為馬弓兵而手五
+或為地心加王加獣而手十五
+
 終季    春終
 
-MAU弓MAIMY橋三    XE虎ZIXU無撃裁
-XAI兵XY無撃裁    XU虎MY無撃裁手赤弓
-XAU虎CAIMY橋四手黒虎    ME弓MIMU橋三
-KAU巫KAIKY無撃裁    ZO皇[TU]ZIZE
-PAU巫ZAU無撃裁    CI兵CE無撃裁
-ZAI船ZI無撃裁手赤船    TE虎ZI水二此無
-ZE皇TI[NU]LO    XA将ZE無撃裁
-ZI船ZEZA橋四手赤王
+ME弓MIMU橋三    MAU弓MAIMY橋二
+CI兵CE無撃裁    MY弓MU無撃裁手黒弓
+MI兵MU無撃裁手赤弓    CAI兵CAU無撃裁
+PE巫CECI無撃裁    ZO皇[ZY]ZAIZAU
+ZI船ZAI無撃裁手黒船    TIA将TAUZAI水無此無
+TE虎NITU橋無此無    TAU虎NAICI橋四手黒巫
+CE兵CI無撃裁手黒虎    XIA将XAUZAI水三手赤船
+MA馬XIMO無撃裁    XAI兵CAI無撃裁
+TE虎NITU橋三    黒巫TY
+XI兵XU無撃裁    TY巫CIZA橋二手赤王
 
-或為王加獣而手八
+或為王而手五
 終季    夏終
 
-MAU弓MAIMY橋二    ME弓MIMU橋三
-CAI兵CAU無撃裁    XE虎ZIXU無撃裁
-MY弓MU無撃裁手黒弓    MI兵MU無撃裁手赤弓
-PAU巫CAUCAI無撃裁    ZA王ZE無撃裁
-CAI巫CAXA橋三手赤将    ZE王XA無撃裁手赤巫
-PIA筆PAIPY橋一    PE巫ZE無撃裁
-PY筆PIPA橋二手赤筆    CA車PA無撃裁手黒筆
-LAU弓LAILY橋一    LE弓LILU橋四
-LY弓LU無撃裁手赤弓    LI兵LU無撃裁手黒弓
-黒弓CY    黒弓CU
-CY弓CU無撃裁手黒弓    CI兵CU無撃裁手黒弓
-黒弓MI    XA王CE無撃裁
-MI弓MA無撃裁手赤馬    CE王MA無撃裁手黒弓
-TAU虎ZAITY無撃裁    NI兵NO水三
-TY虎NOLU無撃裁手赤兵
+ME弓MIMU橋三    XAU虎CAIXY橋二
+CI兵CE無撃裁    CAI兵CAU無撃裁
+PE巫CECI無撃裁    XY虎MUCI無撃裁手黒巫
+CE兵CI無撃裁手赤虎    黒巫CAI
+MU弓MAICAI橋四手黒巫    CIA車CAI無撃裁手黒弓
+XE虎CIXU橋三    黒弓CY
+XI兵XUCU無撃裁    XAI兵XY無撃裁
+ZO皇[ZU]ZIZE    ZAI船ZI無撃裁手赤船
+TE虎ZI水三手黒船    XY兵XU無撃裁手黒虎
+ZI虎XU無撃裁手赤兵    TAU虎NAITY橋二
+XU虎TY無撃裁手黒虎    TAI兵TY無撃裁手赤虎
+黒船ZI    ZE皇[XI]ZU
+黒巫ZO    CAI車ZO水三手黒巫
+ZU皇[XU]ZIZE    ZO車CIPA無撃裁手赤筆
+ZI船ZIA無撃裁手黒王
 
-或為同色馬弓兵而手七
+或為王加同色獣而手十
 終季    秋終
 
 
 星一周`;
 
-    const parsed: Parsed = parseCerkeOnlineKia1Ak1(case1);
+    const parsed: Parsed = parseCerkeOnlineKia1Ak1(case3);
     const states: State[] = getAllStatesFromParsed(parsed);
 
     drawEmptyBoard();
