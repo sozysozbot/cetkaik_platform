@@ -4,12 +4,22 @@ import { getAllStatesFromParsed } from './state';
 import { State } from './types';
 
 window.addEventListener('load', () => {
-    const param = location.href.match(/\?history=(.*)/);
-    if (!param) {
+    // I am avoiding the use of new URL("...").searchParams so that my code can be tested in the local environment
+
+    const search_params = location.href.match(/(\?.*)/);
+    if (!search_params) {
+        alert("棋譜がありません。index.html に戻って再入力してください。");
+        location.href = "./index.html";
+        return;
+    }
+
+    const params = new URLSearchParams(search_params[1]);
+    const history = params.get("history");
+    if (!history) {
         alert("棋譜がありません。index.html に戻って再入力してください。");
         location.href = "./index.html";
     } else {
-        const kiar_ark = decodeURIComponent(param[1]).replace(/\t/g, "    ");
+        const kiar_ark = decodeURIComponent(history).replace(/\t/g, "    ");
         const parsed: Parsed = parseCerkeOnlineKia1Ak1(kiar_ark);
         const states: State[] = getAllStatesFromParsed(parsed);
 
