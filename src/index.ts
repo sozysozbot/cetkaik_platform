@@ -22,6 +22,10 @@ window.addEventListener('load', () => {
         const kiar_ark = decodeURIComponent(history).replace(/\t/g, "    ");
         const parsed: Parsed = parseCerkeOnlineKia1Ak1(kiar_ark);
         const states: State[] = getAllStatesFromParsed(parsed);
+        const is_aside = params.get("side") === "a";
+        if (is_aside) {
+            document.getElementsByClassName('flippable')[0].classList.add('flip');
+        }
 
         document.getElementById("kia_ak")!.textContent = kiar_ark;
 
