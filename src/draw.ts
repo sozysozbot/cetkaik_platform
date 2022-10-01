@@ -285,8 +285,13 @@ function PositionedPieceOnBoardHTML(clm: AbsoluteColumn, rw: AbsoluteRow, piece:
 
 export function highlightNthKia1Ak1(kiar_ark: string, n: number) {
     const lines = kiar_ark.trim().split("\n");
+    const body_starts_at = lines.findIndex(l => 'KLNTZXCMP"'.includes(l[0] ?? '$'));
+    if (body_starts_at === -1) {
+        alert("棋譜が空です。index.html に戻って再入力してください。");
+        location.href = "./index.html";
+    }
     // when n = 0, nothing should be highlighted
-    for (let i = 3; i < lines.length; i++) {
+    for (let i = body_starts_at; i < lines.length; i++) {
         if (lines[i].trim() === "") continue;
         const elems_length = lines[i].split(/ /g).filter(a => a !== "").length;
         if (n > elems_length || n <= 0) {
